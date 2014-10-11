@@ -350,7 +350,7 @@ function _geshifilter_general_highlight_tags_settings($format = NULL) {
   $form = array();
   $f = ($format === NULL) ? '' : "_$format->format";
   $format_id = ($format === NULL) ? NULL : $format->format;
-  
+
   // generic tags
   $form["geshifilter_tags$f"] = array(
     '#type' => 'textfield',
@@ -555,7 +555,7 @@ function _geshifilter_generate_languages_css_file($force=FALSE) {
     $stylesheet_filename = _geshifilter_language_css_path();;
     $ret = file_save_data($stylesheet, $stylesheet_filename, FILE_EXISTS_REPLACE);
     if ($ret) {
-      drupal_set_message(t('(Re)generated external CSS style sheet %file.', array('%file' => $ret)));
+      drupal_set_message(t('(Re)generated external CSS style sheet %file.', array('%file' => $ret->uri)));
     }
     else {
       drupal_set_message(t('Could not generate external CSS file. Check the settings of your <a href="!filesystem">file system</a>.',
