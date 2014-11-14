@@ -342,4 +342,5 @@ function geshifilter_filter_admin_form_submit($form, &$form_state) {
 
 function geshifilter_form_filter_admin_format_form_alter(&$form, &$form_state, $form_id) {
   $form['#submit'][] = 'geshifilter_filter_admin_form_submit';
+  $form['#validate'][] = 'geshifilter_per_filter_language_settings_validate';
 }
