@@ -421,6 +421,15 @@ function _geshifilter_general_highlight_tags_settings($format = NULL) {
     '#default_value' => geshifilter_tags($format_id),
     '#description' => t('Tags that should activate the GeSHi syntax highlighting. Specify a space-separated list of tagnames.'),
   );
+
+  // Decode entities.
+  $form["geshifilter_decode_entities$f"] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Decode entities'),
+    '#default_value' => geshifilter_decode_entities($format_id),
+    '#description' => t('Decode entities, for example, if the code has been typed in a WYSIWYG editor.'),
+  );
+
   // Container tag styles.
   $form["geshifilter_tag_styles$f"] = array(
     '#type' => 'checkboxes',

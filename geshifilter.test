@@ -552,5 +552,26 @@ class GeshiFilterTest extends DrupalWebTestCase {
       t('Checking if [code language="ini"][section]...[/code] works'));
   }
 
-}
+  /**
+   * Issue https://www.drupal.org/node/2047021.
+   */
+  public function testSpecialChars() {
+    variable_set('geshifilter_tags', 'code');
+    variable_set('geshifilter_language_enabled_php', TRUE);
+    variable_set('geshifilter_decode_entities', TRUE);
 
+    $source = '<code language="php"><?php echo("&lt;b&gt;Hi&lt;/b&gt;"); ?></code>';
+
+    // Create a node.
+    $edit = array(
+      'title' => 'Test for Custom Filter',
+      'body[und][0][value]' => $source,
+      'body[und][0][format]' => $this->input_format_id,
+    );
+    // Post node
+    $this->drupalPost('node/add/page', $edit, t('Save'));
+    $this->drupalGet('node/1');
+    // The same string must be on page, not double encoded.
+    $this->assertRaw('&quot;&lt;b&gt;Hi&lt;/b&gt;&quot;', 'The code is not double encoded.');
+  }
+}

@@ -138,7 +138,7 @@ function _geshifilter_prepare($format, $text) {
   if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, $tag_styles)) {
     // Prepare < ?php ... ? > blocks.
     $pattern = '#[\[<](\?php|\?PHP|%)(.+?)((\?|%)[\]>]|$)#s';
-    $text = preg_replace_callback($pattern, '_geshifilter_prepare_php_callback', $text);
+    $text = preg_replace_callback($pattern, create_function('$match', "return _geshifilter_prepare_php_callback(\$match, '$format');"), $text);
   }
   return $text;
 }
@@ -163,6 +163,11 @@ function _geshifilter_prepare_callback($match, $format) {
   $tag_name = $match[2];
   $tag_attributes = $match[3];
   $content = $match[6];
+
+  // Decode HTML entities if option has been set
+  if (geshifilter_decode_entities($format)) {
+    $content = html_entity_decode($content, ENT_QUOTES);
+  }
 
   // get the default highlighting mode
   $lang = variable_get('geshifilter_default_highlighting', GESHIFILTER_DEFAULT_PLAINTEXT);
@@ -200,7 +205,11 @@ function _geshifilter_prepare_callback($match, $format) {
 /**
  * _geshifilter_prepare callback for < ?php ... ? > blocks.
  */
-function _geshifilter_prepare_php_callback($match) {
+function _geshifilter_prepare_php_callback($match, $format) {
+  // Decode HTML entities if option has been set
+  if (geshifilter_decode_entities($format)) {
+    $match[2] = html_entity_decode($match[2], ENT_QUOTES);
+  }
   return '[geshifilter-questionmarkphp]'
     . str_replace(array("\r", "\n"), array('', '&#10;'), check_plain($match[2]))
     .'[/geshifilter-questionmarkphp]';
