@@ -52,6 +52,7 @@ function _geshifilter_parse_attributes($attributes, $format) {
     $att_value = $attribute_matches[2][$a_key];
 
     // Check for the language attributes.
+    $class_to_lang = str_replace('language-', '', $att_value);
     if (in_array($att_name, $language_attributes)) {
       // Try first to map the attribute value to geshi language code.
       if (in_array($att_value, $language_tags)) {
@@ -60,6 +61,10 @@ function _geshifilter_parse_attributes($attributes, $format) {
       // Set language if extracted language is an enabled language.
       if (array_key_exists($att_value, $enabled_languages)) {
         $lang = $att_value;
+      }
+      // class_to_lang hotfix: language never filled cause ckeditor plugin uses classes instead of tags.
+      elseif($att_name == 'class' && array_key_exists($class_to_lang, $enabled_languages)) {
+        $lang = $class_to_lang;
       }
     }
 
