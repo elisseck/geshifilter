@@ -128,22 +128,30 @@ function _geshifilter_prepare($format, $text) {
   if (in_array(GESHIFILTER_BRACKETS_ANGLE, $tag_styles)) {
     // Prepare <foo>..</foo> blocks.
     $pattern = '#(<)('. $tags_string .')((\s+[^>]*)*)(>)(.*?)(</\2\s*>|$)#s';
-    $text = preg_replace_callback($pattern, create_function('$match', "return _geshifilter_prepare_callback(\$match, '$format');"), $text);
+    $text = preg_replace_callback($pattern, function($match) use ($format) {
+      return _geshifilter_prepare_callback($match, $format);
+    }, $text);
   }
   if (in_array(GESHIFILTER_BRACKETS_SQUARE, $tag_styles)) {
     // Prepare [foo]..[/foo] blocks.
     $pattern = '#((?<!\[)\[)('. $tags_string .')((\s+[^\]]*)*)(\])(.*?)((?<!\[)\[/\2\s*\]|$)#s';
-    $text = preg_replace_callback($pattern, create_function('$match', "return _geshifilter_prepare_callback(\$match, '$format');"), $text);
+    $text = preg_replace_callback($pattern, function($match) use ($format) {
+      return _geshifilter_prepare_callback($match, $format);
+    }, $text);
   }
   if (in_array(GESHIFILTER_BRACKETS_DOUBLESQUARE, $tag_styles)) {
     // Prepare [[foo]]..[[/foo]] blocks.
     $pattern = '#(\[\[)('. $tags_string .')((\s+[^\]]*)*)(\]\])(.*?)(\[\[/\2\s*\]\]|$)#s';
-    $text = preg_replace_callback($pattern, create_function('$match', "return _geshifilter_prepare_callback(\$match, '$format');"), $text);
+    $text = preg_replace_callback($pattern, function($match) use ($format) {
+      return _geshifilter_prepare_callback($match, $format);
+    }, $text);
   }
   if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, $tag_styles)) {
     // Prepare < ?php ... ? > blocks.
     $pattern = '#[\[<](\?php|\?PHP|%)(.+?)((\?|%)[\]>]|$)#s';
-    $text = preg_replace_callback($pattern, create_function('$match', "return _geshifilter_prepare_php_callback(\$match, '$format');"), $text);
+    $text = preg_replace_callback($pattern, function($match) use ($format) {
+      return _geshifilter_prepare_php_callback($match, $format);
+    }, $text);
   }
   return $text;
 }
@@ -242,7 +250,10 @@ function _geshifilter_process($format, $text) {
   $tags_string = implode('|', $tags);
   // Pattern for matching the prepared "<code>...</code>" stuff
   $pattern = '#\\[geshifilter-('. $tags_string .')([^\\]]*)\\](.*?)(\\[/geshifilter-\1\\])#s';
-  $text = preg_replace_callback($pattern, create_function('$match', "return _geshifilter_replace_callback(\$match, '$format');"), $text);
+  $text = preg_replace_callback($pattern, function($match) use ($format) {
+    return _geshifilter_replace_callback($match, $format);
+  }, $text);
+
   return $text;
 }
 
