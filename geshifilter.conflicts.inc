@@ -5,12 +5,12 @@
  * Implementation of the conflict detection feature of the GeSHi filter.
  */
 
-require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.inc';
+require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.inc';
 
 /**
  * Menu callback for filter conflicts page
  */
-function geshifilter_admin_filter_conflicts($check_only=FALSE) {
+function geshifilter_admin_filter_conflicts($check_only = FALSE) {
   global $user;
 
   // start
@@ -19,7 +19,7 @@ function geshifilter_admin_filter_conflicts($check_only=FALSE) {
   $geshi_library = libraries_load('geshi');
   if (!$geshi_library['loaded']) {
     if (!$check_only) {
-      drupal_set_message($geshi_library['error message'], 'error');
+      backdrop_set_message($geshi_library['error message'], 'error');
     }
     return $output;
   }
@@ -80,6 +80,7 @@ function _geshifilter_htmlfilter_conflicts($format, $cfilter, $geshifilter) {
     );
   }
   // check tag escaping of html filter
+  // TODO This variable was probably removed in Backdrop without replacement.
   if (variable_get("filter_html_$format", FILTER_HTML_STRIP) == FILTER_HTML_ESCAPE) {
     $conflicts[] = array(
       'description' => t('%cfilter is configured to "Escape all tags", which is likely to cause problems with %geshifilter.',

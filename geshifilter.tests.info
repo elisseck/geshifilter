@@ -1,0 +1,12 @@
+[GeshiFilterAdministrationTest]
+name = GeSHi filter administration
+description = Test the GeSHi filter administration.
+group = GeSHi filter module
+file = geshifilter.test
+
+[GeshiFilterTest]
+name = GeSHi input filter
+description = Test the input filter capabilities of the GeSHi filter.
+group = GeSHi filter module
+file = geshifilter.test
+

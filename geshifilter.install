@@ -10,16 +10,24 @@
  */
 function geshifilter_install() {
   // Enable some popular languages and set their language tags by default
-  $languages = array('php', 'drupal5', 'drupal6', 'javascript', 'java', 'c', 'cpp', 'python', 'ruby');
+  $languages = array('php', 'backdrop5', 'backdrop6', 'javascript', 'java', 'c', 'cpp', 'python', 'ruby');
   foreach ($languages as $language) {
-    variable_set('geshifilter_language_enabled_' . $language, TRUE);
-    variable_set('geshifilter_language_tags_' . $language, '<' . $language . '>');
+    config_set('geshifilter.settings', 'geshifilter_language_enabled_' . $language, TRUE);
+    config_set('geshifilter.settings', 'geshifilter_language_tags_' . $language, '<' . $language . '>');
   }
 
   // what to do next?
-  drupal_set_message(t('GeSHi filter is installed. You should now <a href="!geshi_admin">configure the GeSHi filter</a> and enable it in the desired <a href="!input_formats">text formats</a>.',
+  backdrop_set_message(t('GeSHi filter is installed. You should now <a href="!geshi_admin">configure the GeSHi filter</a> and enable it in the desired <a href="!input_formats">text formats</a>.',
     array('!geshi_admin' => url('admin/config/content/formats/geshifilter'), '!input_formats' => url('admin/config/content/formats'))
   ));
+  // Dynamically generated variable data was detected on the following lines.
+  // /geshifilter/geshifilter.inc line 54
+  // /geshifilter/geshifilter.inc line 118
+  // /geshifilter/geshifilter.inc line 125
+  // /geshifilter/geshifilter.inc line 130
+  // /geshifilter/geshifilter.inc line 135
+  // /geshifilter/geshifilter.inc line 140
+  // /geshifilter/geshifilter.inc line 142
 }
 
 /**
@@ -30,9 +38,57 @@ function geshifilter_uninstall() {
   cache_clear_all('variables', 'cache');
 }
 
+// TODO The old hook_update_N functions cannot be applied to Backdrop.
+function geshifilter_update_7100() { }
+
 /**
- * Remove 'geshifilter_geshi_dir' since it is replaced by libraries API.
+ * Implements hook_update_last_removed().
  */
-function geshifilter_update_7100() {
-  variable_del('geshifilter_geshi_dir');
+function geshifilter_update_last_removed() {
+  return 7100;
+}
+
+/**
+ * Migrate geshifilter variables to config.
+ */
+function geshifilter_update_1000() {
+  $config = config('geshifilter.settings');
+  $config->set('geshifilter_default_highlighting', update_variable_get('geshifilter_default_highlighting', 'GESHIFILTER_DEFAULT_PLAINTEXT'));
+  $config->set('geshifilter_default_line_numbering', update_variable_get('geshifilter_default_line_numbering', 'GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE'));
+  $config->set('geshifilter_use_highlight_string_for_php', update_variable_get('geshifilter_use_highlight_string_for_php', array()));
+  $config->set('geshifilter_enable_keyword_urls', update_variable_get('geshifilter_enable_keyword_urls', TRUE));
+  $config->set('geshifilter_css_mode', update_variable_get('geshifilter_css_mode', 'GESHIFILTER_CSS_INLINE'));
+  $config->set('geshifilter_code_container', update_variable_get('geshifilter_code_container', 'GESHI_HEADER_PRE'));
+  $config->set('geshifilter_language_enabled_language', update_variable_get('geshifilter_language_enabled_language', 'dynamic variable in file /geshifilter/geshifilter.inc line 54'));
+  $config->set('geshifilter_cssfile_languages', update_variable_get('geshifilter_cssfile_languages', ''));
+  $config->set('geshifilter_available_languages_cache', update_variable_get('geshifilter_available_languages_cache', 'NULL'));
+  $config->set('geshifilter_format_specific_options', update_variable_get('geshifilter_format_specific_options', array()));
+  $config->set('geshifilter_tags', update_variable_get('geshifilter_tags', 'code blockcode'));
+  $config->set('geshifilter_tags_format', update_variable_get('geshifilter_tags_format', 'dynamic variable in file /geshifilter/geshifilter.inc line 118'));
+  $config->set('geshifilter_decode_entities', update_variable_get('geshifilter_decode_entities', '0'));
+  $config->set('geshifilter_decode_entities_format', update_variable_get('geshifilter_decode_entities_format', 'dynamic variable in file /geshifilter/geshifilter.inc line 125'));
+  $config->set('geshifilter_tag_styles', update_variable_get('geshifilter_tag_styles', 'dynamic value in file /geshifilter/geshifilter.inc line 130'));
+  $config->set('geshifilter_tag_styles_format', update_variable_get('geshifilter_tag_styles_format', 'dynamic variable in file /geshifilter/geshifilter.inc line 135'));
+  $config->set('geshifilter_language_tags_language', update_variable_get('geshifilter_language_tags_language', 'dynamic variable in file /geshifilter/geshifilter.inc line 140'));
+  $config->set('geshifilter_language_tags_language_format', update_variable_get('geshifilter_language_tags_language_format', 'dynamic variable in file /geshifilter/geshifilter.inc line 142'));
+  $config->save();
+
+  update_variable_del('geshifilter_default_highlighting');
+  update_variable_del('geshifilter_default_line_numbering');
+  update_variable_del('geshifilter_use_highlight_string_for_php');
+  update_variable_del('geshifilter_enable_keyword_urls');
+  update_variable_del('geshifilter_css_mode');
+  update_variable_del('geshifilter_code_container');
+  update_variable_del('geshifilter_language_enabled_language');
+  update_variable_del('geshifilter_cssfile_languages');
+  update_variable_del('geshifilter_available_languages_cache');
+  update_variable_del('geshifilter_format_specific_options');
+  update_variable_del('geshifilter_tags');
+  update_variable_del('geshifilter_tags_format');
+  update_variable_del('geshifilter_decode_entities');
+  update_variable_del('geshifilter_decode_entities_format');
+  update_variable_del('geshifilter_tag_styles');
+  update_variable_del('geshifilter_tag_styles_format');
+  update_variable_del('geshifilter_language_tags_language');
+  update_variable_del('geshifilter_language_tags_language_format');
 }

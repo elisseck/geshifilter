@@ -42,12 +42,12 @@ function geshifilter_help($path, $arg) {
   switch ($path) {
     case 'admin/config/content/formats/geshifilter':
     case 'admin/help#geshifilter':
-      $output = '<p>'. t('The GeSHi filter module provides a filter for syntax highlighting of inline source code or blocks of source code based on the PHP library !GeSHi.', array('!GeSHi' => l('GeSHi (Generic Syntax Highlighter)', 'http://qbnz.com/highlighter/'))) .'</p>';
+      $output = '<p>' . t('The GeSHi filter module provides a filter for syntax highlighting of inline source code or blocks of source code based on the PHP library !GeSHi.', array('!GeSHi' => l('GeSHi (Generic Syntax Highlighter)', 'http://qbnz.com/highlighter/'))) . '</p>';
       if ($path == 'admin/help#geshifilter') {
-        $output .= '<p>'. t('The GeSHi filter module for Drupal requires the GeSHi library (version 1.0.x) to work. The GeSHi filter is actually just a Drupal wrapper module around the GeSHi library. Because of <a href="!repositorypolicies">drupal.org repository policies</a> however, the GeSHi library is not included in the GeSHi filter package, so you should <a href="!geshi">download</a> and install the GeSHi library separately.', array(
+        $output .= '<p>' . t('The GeSHi filter module for Backdrop requires the GeSHi library (version 1.0.x) to work. The GeSHi filter is actually just a Backdrop wrapper module around the GeSHi library. Because of <a href="!repositorypolicies">drupal.org repository policies</a> however, the GeSHi library is not included in the GeSHi filter package, so you should <a href="!geshi">download</a> and install the GeSHi library separately.', array(
           '!repositorypolicies' => url('http://drupal.org/node/66113'),
           '!geshi' => url('http://qbnz.com/highlighter/'),
-        )) .'</p>';
+        )) . '</p>';
         $output .= t('<p>Quick overview of how to set up and use the GeSHi filter:</p><ul><li>Install the GeSHi library and specify its path on the <a href="!geshifilter_settings">GeSHi filter administration page</a>.</li><li>Configure the <a href="!geshifilter_settings">general GeSHi filter settings</a>.</li><li><a href="!geshifilter_languages">Enable the relevant languages</a> for your site and set their language tags if needed.</li><li>Enable the GeSHi filter in the desired !inputformats.</li><li>Check for !filterconflicts and resolve them.</li><li>Use the text format during content submission as described in the !filtertips.</li></ul>', array(
           '!geshifilter_settings' => url('admin/config/content/formats/geshifilter'),
           '!geshifilter_languages' => url('admin/config/content/formats/geshifilter/languages/all'),
@@ -62,9 +62,9 @@ function geshifilter_help($path, $arg) {
     case 'admin/config/content/formats/geshifilter/languages/enabled':
     case 'admin/config/content/formats/geshifilter/languages/all':
     case 'admin/config/content/formats/geshifilter/languages/disabled':
-      $output = '<p>'. t('Here you can enable/disable the desired languages to use. It is suggested to disable languages that are not relevant for you site not only to avoid unnecessary cluttering of the GeSHi filter configuration pages and the !filtertips, but also to make the GeSHi filter processing lighter.', array('!filtertips' => l(t('filter tips'), 'filter/tips'))) .'</p>';
+      $output = '<p>' . t('Here you can enable/disable the desired languages to use. It is suggested to disable languages that are not relevant for you site not only to avoid unnecessary cluttering of the GeSHi filter configuration pages and the !filtertips, but also to make the GeSHi filter processing lighter.', array('!filtertips' => l(t('filter tips'), 'filter/tips'))) . '</p>';
       if (!geshifilter_use_format_specific_options()) {
-        $output .= '<p>'. t('You can also define the language specific tags here.') .'</p>';
+        $output .= '<p>' . t('You can also define the language specific tags here.') . '</p>';
       }
       return $output;
       break;
@@ -80,7 +80,7 @@ function geshifilter_menu() {
     'title' => 'GeSHi Filter',
     'description' => 'Configure the GeSHi filter.',
     'file' => 'geshifilter.admin.inc',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('geshifilter_admin_general_settings'),
     'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
@@ -105,7 +105,7 @@ function geshifilter_menu() {
     'title' => 'Languages',
     'description' => 'Enable the desired languages and configure their settings.',
     'file' => 'geshifilter.admin.inc',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('geshifilter_admin_per_language_settings'),
     'access arguments' => array('administer site configuration'),
     'type' => MENU_LOCAL_TASK,
@@ -145,22 +145,33 @@ function geshifilter_menu() {
 
 
 /**
+ * Implements hook_config_info().
+ */
+function geshifilter_config_info() {
+  $prefixes['geshifilter.settings'] = array(
+    'label' => t('GeSHi Filter settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
+
+/**
  * Implements hook_init().
  */
 function geshifilter_init() {
   // Since the filtered content is cached, it is not possible to know on which
   // pages the css file is actually needed. Thus it is included on all pages.
-  if (variable_get('geshifilter_css_mode', GESHIFILTER_CSS_INLINE) == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
-    drupal_add_css(_geshifilter_language_css_path());
+  if (config_get('geshifilter.settings', 'geshifilter_css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
+    backdrop_add_css(_geshifilter_language_css_path());
   }
-  drupal_add_css(drupal_get_path('module', 'geshifilter') .'/geshifilter.css');
+  backdrop_add_css(backdrop_get_path('module', 'geshifilter') . '/geshifilter.css');
 }
 
 /**
  * Filter-Tips callback.
  */
 function geshifilter_filter_tips($delta, $format, $long = FALSE) {
-  require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.filtertips.inc';
+  require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.filtertips.inc';
   return _geshifilter_filter_tips($delta, $format, $long);
 }
 
@@ -189,7 +200,7 @@ function geshifilter_filter_info() {
  * Prepare callback for the GeSHi filter.
  */
 function geshifilter_prepare_callback($text, $filter) {
-  require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.pages.inc';
+  require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.pages.inc';
   return _geshifilter_prepare($filter->format, $text);
 }
 
@@ -197,7 +208,7 @@ function geshifilter_prepare_callback($text, $filter) {
  * Process callback for the GeSHi filter.
  */
 function geshifilter_process_callback($text, $filter) {
-  require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.pages.inc';
+  require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.pages.inc';
   return _geshifilter_process($filter->format, $text);
 }
 
@@ -205,7 +216,7 @@ function geshifilter_process_callback($text, $filter) {
  * Settings callback for the GeSHi filter.
  */
 function geshifilter_filter_settings_callback($form, &$form_state, $filter, $format, $defaults, $filters) {
-  require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.admin.inc';
+  require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
   return _geshifilter_filter_settings($form, $form_state, $filter, $format, $defaults, $filters);
 }
 
@@ -226,7 +237,7 @@ function geshifilter_theme() {
 function geshifilter_requirements($phase) {
   $requirements = array();
   if ($phase == 'runtime') {
-    require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.inc';
+    require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.inc';
     // check if GeSHi library is available
     $geshi_library = libraries_load('geshi');
     if (!$geshi_library['loaded']) {
@@ -254,7 +265,7 @@ function geshifilter_requirements($phase) {
     }
 
     // Warn if GeSHi filter is configured to automatically managed external stylesheet when it's not possible
-    if (variable_get('geshifilter_css_mode', GESHIFILTER_CSS_INLINE) == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !_geshifilter_managed_external_stylesheet_possible()) {
+    if (config_get('geshifilter.settings', 'geshifilter_css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !_geshifilter_managed_external_stylesheet_possible()) {
       $requirements[] = array(
         'title' => 'GeSHi filter CSS mode',
         'value' => t('GeSHi filter can not automatically manage an external style sheet when the download method is private.'),
@@ -265,7 +276,7 @@ function geshifilter_requirements($phase) {
     }
 
     // check for filter conflicts
-    require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.conflicts.inc';
+    require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.conflicts.inc';
     if (geshifilter_admin_filter_conflicts(TRUE) > 0) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
@@ -315,32 +326,52 @@ function _geshifilter_managed_external_stylesheet_possible() {
  * Callback function for generating the CSS rules for the syntax highlighting.
  */
 function geshifilter_generate_language_css_rules() {
-  require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.admin.inc';
-  drupal_add_http_header("Content-type", "text/css");
+  require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
+  backdrop_add_http_header("Content-type", "text/css");
   $output = _geshifilter_generate_languages_css_rules();
   print($output);
   exit();
 }
 
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
 function _geshifilter_language_css_path($dironly = FALSE) {
   $directory = file_default_scheme() . '://geshi';
-  return $dironly ? $directory : $directory .'/geshifilter-languages.css';
+  return $dironly ? $directory : $directory . '/geshifilter-languages.css';
 }
 
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
 function geshifilter_filter_admin_form_submit($form, &$form_state) {
   if (isset($form_state['values']['filters']['geshifilter']['settings'])) {
     $values = $form_state['values']['filters']['geshifilter']['settings'];
     $f = $form_state['values']['format'];
-    variable_set("geshifilter_tags_{$f}", $values['general_tags']["geshifilter_tags_{$f}"]);
-    variable_set("geshifilter_tag_styles_{$f}", $values['general_tags']["geshifilter_tag_styles_{$f}"]);
+    config_set('geshifilter.settings', "geshifilter_tags_{$f}", $values['general_tags']["geshifilter_tags_{$f}"]);
+    config_set('geshifilter.settings', "geshifilter_tag_styles_{$f}", $values['general_tags']["geshifilter_tag_styles_{$f}"]);
     $languages = $values['per_language_settings']['table']['languages'];
-    foreach($languages as $key => $value) {
-      variable_set("geshifilter_language_tags_{$key}_{$f}", $value["geshifilter_language_tags_{$key}_{$f}"]);
+    foreach ($languages as $key => $value) {
+      config_set('geshifilter.settings', "geshifilter_language_tags_{$key}_{$f}", $value["geshifilter_language_tags_{$key}_{$f}"]);
     }
   }
 }
 
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
 function geshifilter_form_filter_admin_format_form_alter(&$form, &$form_state, $form_id) {
   $form['#submit'][] = 'geshifilter_filter_admin_form_submit';
   $form['#validate'][] = 'geshifilter_per_filter_language_settings_validate';
+}
+
+/**
+ * Implements hook_autoload_info().
+ */
+function geshifilter_autoload_info() {
+  return array(
+  );
 }

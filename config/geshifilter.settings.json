@@ -1,0 +1,21 @@
+{
+    "_config_name": "geshifilter.settings",
+    "geshifilter_default_highlighting": "GESHIFILTER_DEFAULT_PLAINTEXT",
+    "geshifilter_default_line_numbering": "GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE",
+    "geshifilter_use_highlight_string_for_php": false,
+    "geshifilter_enable_keyword_urls": true,
+    "geshifilter_css_mode": "GESHIFILTER_CSS_INLINE",
+    "geshifilter_code_container": "GESHI_HEADER_PRE",
+    "geshifilter_language_enabled_language": "dynamic variable in file /geshifilter/geshifilter.inc line 54",
+    "geshifilter_cssfile_languages": "",
+    "geshifilter_available_languages_cache": "NULL",
+    "geshifilter_format_specific_options": false,
+    "geshifilter_tags": "code blockcode",
+    "geshifilter_tags_format": "dynamic variable in file /geshifilter/geshifilter.inc line 118",
+    "geshifilter_decode_entities": "0",
+    "geshifilter_decode_entities_format": "dynamic variable in file /geshifilter/geshifilter.inc line 125",
+    "geshifilter_tag_styles": "dynamic value in file /geshifilter/geshifilter.inc line 130",
+    "geshifilter_tag_styles_format": "dynamic variable in file /geshifilter/geshifilter.inc line 135",
+    "geshifilter_language_tags_language": "dynamic variable in file /geshifilter/geshifilter.inc line 140",
+    "geshifilter_language_tags_language_format": "dynamic variable in file /geshifilter/geshifilter.inc line 142"
+}

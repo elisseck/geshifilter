@@ -7,7 +7,7 @@
  */
 
 /**
- * Implementation of hook_theme().
+ * Implements hook_theme().
  */
 function geshifield_theme() {
   return array(
@@ -27,7 +27,7 @@ function geshifield_theme() {
 }
 
 /**
- * Implementation of hook_field_info().
+ * Implements hook_field_info().
  */
 function geshifield_field_info() {
   return array(
@@ -52,14 +52,14 @@ function geshifield_field_widget_form(&$form, &$form_state, $field, $instance, $
 }
 
 /**
- * Implementation of hook_content_is_empty().
+ * Implements hook_content_is_empty().
  */
 function geshifield_field_is_empty($item, $field) {
   return empty($item['sourcecode']);
 }
 
 /**
- * Implementation of hook_widget_info().
+ * Implements hook_widget_info().
  */
 function geshifield_field_widget_info() {
   return array(
@@ -82,8 +82,8 @@ function geshifield_field_widget_info() {
 }
 
 /**
- * Implementation of hook_elements_info().
-*/
+ * Implements hook_elements_info().
+ */
 function geshifield_element_info() {
   $elements = array(
     'geshifield_textarea' => array(
@@ -129,7 +129,7 @@ function geshifield_textarea_process($element, $form_state, $complete_form) {
 }
 
 /**
- * Implementation of hook_field_formatter_info().
+ * Implements hook_field_formatter_info().
  */
 function geshifield_field_formatter_info() {
   return array(
@@ -148,16 +148,24 @@ function geshifield_field_formatter_info() {
   );
 }
 
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
 function geshifield_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $elements = array();
   foreach ($items as $delta => $item) {
     $elements[$delta] = array(
-      '#markup' => theme('geshifield_formatter_'. $display['type'], array('element' => $item, 'field' => $instance)),
+      '#markup' => theme('geshifield_formatter_' . $display['type'], array('element' => $item, 'field' => $instance)),
     );
   }
   return $elements;
 }
 
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
 function theme_geshifield_formatter_default($variables) {
   $output = '';
   module_load_include('inc', 'geshifilter', 'geshifilter.pages');
@@ -167,6 +175,10 @@ function theme_geshifield_formatter_default($variables) {
   return $output;
 }
 
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
 function theme_geshifield_formatter_nohighlighting($variables) {
   $output = '';
   module_load_include('inc', 'geshifilter', 'geshifilter.pages');
@@ -176,6 +188,10 @@ function theme_geshifield_formatter_nohighlighting($variables) {
   return $output;
 }
 
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
 function theme_geshifield_formatter_trimmed($variables) {
   $output = '';
   module_load_include('inc', 'geshifilter', 'geshifilter.pages');

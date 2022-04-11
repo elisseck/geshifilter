@@ -5,12 +5,13 @@
  * Implementation of the filter tips.
  */
 
-require_once drupal_get_path('module', 'geshifilter') .'/geshifilter.inc';
+require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.inc';
 
 /**
  * Provides filter tips.
  */
 function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
+  $config = config('geshifilter.settings');
   // Get the supported tag styles.
   $tag_styles = array_filter(_geshifilter_tag_styles($filter->format));
   $tag_style_examples = array();
@@ -20,24 +21,24 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
       $bracket_open = check_plain('<');
       $bracket_close = check_plain('>');
     }
-    $tag_style_examples[] = '<code>'. check_plain('<foo>') .'</code>';
+    $tag_style_examples[] = '<code>' . check_plain('<foo>') . '</code>';
   }
   if (in_array(GESHIFILTER_BRACKETS_SQUARE, $tag_styles)) {
     if (!$bracket_open) {
       $bracket_open = check_plain('[');
       $bracket_close = check_plain(']');
     }
-    $tag_style_examples[] = '<code>'. check_plain('[foo]') .'</code>';
+    $tag_style_examples[] = '<code>' . check_plain('[foo]') . '</code>';
   }
   if (in_array(GESHIFILTER_BRACKETS_DOUBLESQUARE, $tag_styles)) {
     if (!$bracket_open) {
       $bracket_open = check_plain('[[');
       $bracket_close = check_plain(']]');
     }
-    $tag_style_examples[] = '<code>'. check_plain('[[foo]]') .'</code>';
+    $tag_style_examples[] = '<code>' . check_plain('[[foo]]') . '</code>';
   }
   if (!$bracket_open) {
-    drupal_set_message(t('Could not determine a valid tag style for GeSHi filtering.'), 'error');
+    backdrop_set_message(t('Could not determine a valid tag style for GeSHi filtering.'), 'error');
     $bracket_open = check_plain('<');
     $bracket_close = check_plain('>');
   }
@@ -50,12 +51,12 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
     $lang_attributes = _geshifilter_whitespace_explode(GESHIFILTER_ATTRIBUTES_LANGUAGE);
 
     // syntax highlighting tags
-    $output = '<p>'. t('Syntax highlighting of source code can be enabled with the following tags:') .'</p>';
+    $output = '<p>' . t('Syntax highlighting of source code can be enabled with the following tags:') . '</p>';
     $items = array();
     // generic tags
     $tags = array();
     foreach ($generic_code_tags as $tag) {
-      $tags[] = '"<code>'. $bracket_open . $tag . $bracket_close .'</code>"';
+      $tags[] = '"<code>' . $bracket_open . $tag . $bracket_close . '</code>"';
     }
     $items[] = t('Generic syntax highlighting tags: !tags.', array('!tags' => implode(', ', $tags)));
     // language tags
@@ -75,7 +76,7 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
     $output .= theme('item_list', array('items' => $items));
 
     // Options and tips
-    $output .= '<p>'. t('Options and tips:') .'</p>';
+    $output .= '<p>' . t('Options and tips:') . '</p>';
     $items = array();
 
     // info about language attribute to language mapping
@@ -95,7 +96,7 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
 
     // Tag style options.
     if (count($tag_style_examples) > 1) {
-      $items[] = t('The supported tag styles are: !tag_styles.' , array('!tag_styles' => implode(', ', $tag_style_examples)));
+      $items[] = t('The supported tag styles are: !tag_styles.', array('!tag_styles' => implode(', ', $tag_style_examples)));
     }
 
     // line numbering options
@@ -113,9 +114,9 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
     $output .= theme('item_list', array('items' => $items));
 
     // Defaults
-    $output .= '<p>'. t('Defaults:') .'</p>';
+    $output .= '<p>' . t('Defaults:') . '</p>';
     $items = array();
-    $default_highlighting = variable_get('geshifilter_default_highlighting', GESHIFILTER_DEFAULT_PLAINTEXT);
+    $default_highlighting = $config->get('geshifilter_default_highlighting');
     switch ($default_highlighting) {
       case GESHIFILTER_DEFAULT_DONOTHING:
         $description =  t('when no language attribute is specified the code block won\'t be processed by the GeSHi filter');
@@ -128,7 +129,7 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
         break;
     }
     $items[] = t('Default highlighting mode for generic syntax highlighting tags: !description.', array('!description' => $description));
-    $default_line_numbering = variable_get('geshifilter_default_line_numbering', GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE);
+    $default_line_numbering = $config->get('geshifilter_default_line_numbering');
     switch ($default_line_numbering) {
       case GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE:
         $description = t('no line numbers');
@@ -144,39 +145,39 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
     $output .= theme('item_list', array('items' => $items));
 
     // Examples
-    $output .= '<p>'. t('Examples:') .'</p>';
+    $output .= '<p>' . t('Examples:') . '</p>';
     $header = array(t('You type'), t('You get'));
     $rows = array();
     if (count($generic_code_tags)) {
       $generic_code_tag = $generic_code_tags[0];
       $lang = array_rand($languages);
       $generic_code_tag_open = $bracket_open . $generic_code_tag;
-      $generic_code_tag_close = $bracket_open .'/'. $generic_code_tag . $bracket_close;
+      $generic_code_tag_close = $bracket_open . '/' . $generic_code_tag . $bracket_close;
       $rows[] = array(
-        '<code>'. $generic_code_tag_open . $bracket_close .'foo = "bar";'. $generic_code_tag_close .'</code>',
+        '<code>' . $generic_code_tag_open . $bracket_close . 'foo = "bar";' . $generic_code_tag_close . '</code>',
         t('Inline code with the default syntax highlighting mode.'),
       );
       $rows[] = array(
-        '<code>'. $generic_code_tag_open . $bracket_close .'<br />foo = "bar";<br />baz = "foz";<br />'. $generic_code_tag_close .'</code>',
+        '<code>' . $generic_code_tag_open . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $generic_code_tag_close . '</code>',
         t('Code block with the default syntax highlighting mode.'),
       );
       $rows[] = array(
-        '<code>'. $generic_code_tag_open .' '. $lang_attributes[1 % count($lang_attributes)] .'="'. $lang .'" '. GESHIFILTER_ATTRIBUTE_LINE_NUMBERING .'="normal"'. $bracket_close .'<br />foo = "bar";<br />baz = "foz";<br />'. $generic_code_tag_close .'</code>',
+        '<code>' . $generic_code_tag_open . ' ' . $lang_attributes[1 % count($lang_attributes)] . '="' . $lang . '" ' . GESHIFILTER_ATTRIBUTE_LINE_NUMBERING . '="normal"' . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $generic_code_tag_close . '</code>',
         t('Code block with syntax highlighting for @lang source code<br /> and normal line numbers.', array('@lang' => $languages[$lang])),
       );
       $rows[] = array(
-        '<code>'. $generic_code_tag_open .' '. $lang_attributes[2 % count($lang_attributes)] .'="'. $lang .'" '. GESHIFILTER_ATTRIBUTE_LINE_NUMBERING_START .'="23" '. GESHIFILTER_ATTRIBUTE_FANCY_N .'="7"'. $bracket_close .'<br />foo = "bar";<br />baz = "foz";<br />'. $generic_code_tag_close .'</code>',
+        '<code>' . $generic_code_tag_open . ' ' . $lang_attributes[2 % count($lang_attributes)] . '="' . $lang . '" ' . GESHIFILTER_ATTRIBUTE_LINE_NUMBERING_START . '="23" ' . GESHIFILTER_ATTRIBUTE_FANCY_N . '="7"' . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $generic_code_tag_close . '</code>',
         t('Code block with syntax highlighting for @lang source code,<br />line numbers starting from 23<br /> and highlighted line numbers every 7<sup>th</sup> line.', array('@lang' => $languages[$lang])),
       );
     }
     if (count($language_tags)) {
       $language_tag = $language_tags[0];
       $rows[] = array(
-        '<code>'. $bracket_open . $language_tag . $bracket_close .'<br />foo = "bar";<br />baz = "foz";<br />'. $bracket_open .'/'. $language_tag . $bracket_close .'</code>',
+        '<code>' . $bracket_open . $language_tag . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $bracket_open . '/' . $language_tag . $bracket_close . '</code>',
         t('Code block with syntax highlighting for @lang source code.', array('@lang' => $languages[$tag_to_lang[$language_tag]])),
       );
       $rows[] = array(
-        '<code>'. $bracket_open . $language_tag .' '. GESHIFILTER_ATTRIBUTE_LINE_NUMBERING_START .'="23" '. GESHIFILTER_ATTRIBUTE_FANCY_N .'="7"'. $bracket_close .'<br />foo = "bar";<br />baz = "foz";<br />'. $bracket_open . $language_tag . $bracket_close .'</code>',
+        '<code>' . $bracket_open . $language_tag . ' ' . GESHIFILTER_ATTRIBUTE_LINE_NUMBERING_START . '="23" ' . GESHIFILTER_ATTRIBUTE_FANCY_N . '="7"' . $bracket_close . '<br />foo = "bar";<br />baz = "foz";<br />' . $bracket_open . $language_tag . $bracket_close . '</code>',
         t('Code block with syntax highlighting for @lang source code,<br />line numbers starting from 23<br /> and highlighted line numbers every 7<sup>th</sup> line.', array('@lang' => $languages[$tag_to_lang[$language_tag]])),
       );
     }
@@ -188,18 +189,18 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
     list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($filter->format);
     $tags = array();
     foreach ($generic_code_tags as $tag) {
-      $tags[] = '<code>'. $bracket_open . $tag . $bracket_close .'</code>';
+      $tags[] = '<code>' . $bracket_open . $tag . $bracket_close . '</code>';
     }
     foreach ($language_tags as $tag) {
-      $tags[] = '<code>'. $bracket_open . $tag . $bracket_close .'</code>';
+      $tags[] = '<code>' . $bracket_open . $tag . $bracket_close . '</code>';
     }
     $output = t('You can enable syntax highlighting of source code with the following tags: !tags.', array('!tags' => implode(', ', $tags)));
     // Tag style options.
     if (count($tag_style_examples) > 1) {
-      $output .= ' '. t('The supported tag styles are: !tag_styles.' , array('!tag_styles' => implode(', ', $tag_style_examples)));
+      $output .= ' ' . t('The supported tag styles are: !tag_styles.', array('!tag_styles' => implode(', ', $tag_style_examples)));
     }
     if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, $tag_styles)) {
-      $output .= ' '. t('PHP source code can also be enclosed in &lt;?php ... ?&gt; or &lt;% ... %&gt;.');
+      $output .= ' ' . t('PHP source code can also be enclosed in &lt;?php ... ?&gt; or &lt;% ... %&gt;.');
     }
     return $output;
   }
