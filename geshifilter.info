@@ -5,4 +5,3 @@ backdrop = 1.x
 type = module
 php = 5.3
 configure = admin/config/content/formats/geshifilter
-dependencies[] = libraries (>=2.0)
