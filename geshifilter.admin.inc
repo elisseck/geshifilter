@@ -61,10 +61,20 @@ function geshifilter_admin_general_settings($form, &$form_state) {
   // Try to load GeSHi library and get version if successful.
   $geshi_library = libraries_load('geshi');
 
-  // GeSHi library settings (constant GESHI_VERSION is defined in GeSHi library)
+  $form['geshifilter_help'] = array(
+    '#type' => 'fieldset',
+    '#description' => '<p>' . t('The GeSHi filter module provides a filter for syntax highlighting of inline source code or blocks of source code based on the PHP library !GeSHi.', array('!GeSHi' => l('GeSHi (Generic Syntax Highlighter)', 'http://qbnz.com/highlighter/'))) . '</p>'
+      . t('<p>Quick overview of how to set up and use the GeSHi filter:</p><ul><li>Install the GeSHi library and specify its path on the <a href="!geshifilter_settings">GeSHi filter administration page</a>.</li><li>Configure the <a href="!geshifilter_settings">general GeSHi filter settings</a>.</li><li><a href="!geshifilter_languages">Enable the relevant languages</a> for your site and set their language tags if needed.</li><li>Enable the GeSHi filter in the desired !inputformats.</li><li>Check for !filterconflicts and resolve them.</li><li>Use the text format during content submission as described in the !filtertips.</li></ul>', array(
+          '!geshifilter_settings' => url('admin/config/content/formats/geshifilter'),
+          '!geshifilter_languages' => url('admin/config/content/formats/geshifilter/languages/all'),
+          '!inputformats' => l(t('text formats'), 'admin/config/content/formats'),
+          '!filterconflicts' => l(t('filter conflicts'), 'admin/config/content/formats/geshifilter/filterconflicts'),
+          '!filtertips' => l(t('filter tips'), 'filter/tips'),
+    )));
+  // GeSHi library settings (constant GESHI_VERSION is defined in GeSHi library).
   $form['geshifilter_library_info'] = array(
     '#type' => 'fieldset',
-    '#title' => defined('GESHI_VERSION')?t('GeSHi library version @version detected', array('@version' => GESHI_VERSION)) : t('GeSHi library'),
+    '#title' => defined('GESHI_VERSION') ? t('GeSHi library version @version detected', array('@version' => GESHI_VERSION)) : t('GeSHi library'),
     '#description' => t('The GeSHi filter requires the GeSHi library (which needs to be <a href="!geshi">downloaded</a> and installed seperately).',
       array('!geshi' => url('http://qbnz.com/highlighter/'))),
     '#collapsible' => TRUE,
