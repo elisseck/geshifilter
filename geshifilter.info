@@ -3,5 +3,6 @@ description = Provides a filter to highlight source code using the GeSHi library
 package = Filters
 backdrop = 1.x
 type = module
-php = 5.3
+php = 7.4
 configure = admin/config/content/formats/geshifilter
+dependencies[] = libraries
