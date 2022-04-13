@@ -5,7 +5,7 @@
  * Implementation of the filter tips.
  */
 
-require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.inc';
+require_once __DIR__ . '/geshifilter.inc';
 
 /**
  * Provides filter tips.
