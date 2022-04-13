@@ -116,7 +116,7 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
     // Defaults
     $output .= '<p>' . t('Defaults:') . '</p>';
     $items = array();
-    $default_highlighting = $config->get('default_highlighting');
+    $default_highlighting = $config->get('geshifilter_default_highlighting');
     switch ($default_highlighting) {
       case GESHIFILTER_DEFAULT_DONOTHING:
         $description =  t('when no language attribute is specified the code block won\'t be processed by the GeSHi filter');
@@ -129,7 +129,7 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
         break;
     }
     $items[] = t('Default highlighting mode for generic syntax highlighting tags: !description.', array('!description' => $description));
-    $default_line_numbering = $config->get('default_line_numbering');
+    $default_line_numbering = $config->get('geshifilter_default_line_numbering');
     switch ($default_line_numbering) {
       case GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE:
         $description = t('no line numbers');

@@ -131,7 +131,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
     $form['geshifilter_highlighting_options']['geshifilter_default_highlighting'] = array(
       '#type' => 'select',
       '#title' => t('Default highlighting mode'),
-      '#default_value' => $config->get('default_highlighting'),
+      '#default_value' => $config->get('geshifilter_default_highlighting'),
       '#options' => array(
         t('No highlighting') => array(
           GESHIFILTER_DEFAULT_DONOTHING => t('Do nothing'),
@@ -145,7 +145,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
     $form['geshifilter_highlighting_options']['geshifilter_default_line_numbering'] = array(
       '#type' => 'select',
       '#title' => t('Default line numbering'),
-      '#default_value' => $config->get('default_line_numbering'),
+      '#default_value' => $config->get('geshifilter_default_line_numbering'),
       '#options' => array(
         GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE => t('no line numbers'),
         GESHIFILTER_LINE_NUMBERS_DEFAULT_NORMAL => t('normal line numbers'),
@@ -162,7 +162,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
       '#title' => t('Use built-in PHP function <code>highlight_string()</code> for PHP source code.'),
       '#description' => t('When enabled, PHP source code will be syntax highlighted with the built-in PHP function <code><a href="!highlight_string">highlight_string()</a></code> instead of with the GeSHi library. GeSHi features, like line numbering and usage of an external CSS stylesheet for example, are not available.',
         array('!highlight_string' => 'http://php.net/manual/en/function.highlight-string.php')),
-      '#default_value' => $config->get('use_highlight_string_for_php'),
+      '#default_value' => $config->get('geshifilter_use_highlight_string_for_php'),
     );
     // Option to disable Keyword URL's
     $form['geshifilter_highlighting_options']['geshifilter_enable_keyword_urls'] = array(
@@ -170,7 +170,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
       '#title' => t('Enable GeSHi keyword URLs'),
       '#description' => t('For some languages GeSHi can link language keywords (e.g. standard library functions) to their online documentation. (GeSHi documentation: <a href="!link">Keyword URLs</a>).',
         array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#keyword-urls')),
-      '#default_value' => $config->get('enable_keyword_urls'),
+      '#default_value' => $config->get('geshifilter_enable_keyword_urls'),
     );
 
     // Styling, layout and CSS
@@ -189,7 +189,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
         GESHIFILTER_CSS_CLASSES_AUTOMATIC => t('Use CSS classes and an automatically managed external CSS style sheet.'),
         GESHIFILTER_CSS_CLASSES_ONLY => t('Only add CSS classes to the markup.'),
       ),
-      '#default_value' => $config->get('css_mode'),
+      '#default_value' => $config->get('geshifilter_css_mode'),
       '#description' => t('Inline CSS is easier to set up, does not depend on an external style sheets and is consequently more robust to copy/paste operations like content aggregation. However, usage of CSS classes and an external stylesheet requires much less markup code and bandwidth. The external style sheet can be managed automatically by the GeSHi filter module, but this feature requires the public <a href="!filesystem">download method</a>. If the GeSHi filter is configured to only add the CSS classes to the markup, the administrator or themer is responsible for adding the appropriate CSS rules to the pages (e.g. based on <a href="!cssdefaults">these defaults</a>). (GeSHi documentation: <a href="!geshidoc">Using CSS Classes</a>).',
         array(
           '!geshidoc' => 'http://qbnz.com/highlighter/geshi-doc.html#using-css-classes',
@@ -223,7 +223,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
         array('!link' => 'http://qbnz.com/highlighter/geshi-doc.html#the-code-container')
       ),
       '#options' => $container_options,
-      '#default_value' => $config->get('code_container'),
+      '#default_value' => $config->get('geshifilter_code_container'),
     );
   }
   // Make it a system settings form.
@@ -249,10 +249,10 @@ function geshifilter_admin_general_settings_validate($form, &$form_state) {
  */
 function geshifilter_admin_general_settings_submit($form, &$form_state) {
   // Regenerate language_css
-  // Note the use of variable_get('css_mode') which is alread set
-  // to $form_state['values']['css_mode'] by
+  // Note the use of config_get('geshifilter_css_mode') which is alread set
+  // to $form_state['values']['geshifilter_css_mode'] by
   // system_settings_form_submit, which is run before this submit handler.
-  if (config_get('geshifilter.settings', 'css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
+  if (config_get('geshifilter.settings', 'geshifilter_css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
     _geshifilter_generate_languages_css_file();
   }
   // Always clear the filter cache.
@@ -417,7 +417,7 @@ function geshifilter_per_filter_language_settings_validate($form, &$form_state) 
  */
 function geshifilter_admin_per_language_settings_submit($form, &$form_state) {
   // regenerate language_css
-  if (config_get('geshifilter.settings', 'css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
+  if (config_get('geshifilter.settings', 'geshifilter_css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
     _geshifilter_generate_languages_css_file();
   }
   _geshifilter_clear_filter_cache();
@@ -489,7 +489,7 @@ function geshifilter_per_language_settings($format, $view, $add_checkbox, $add_t
   $form['languages'] = array();
   $languages = _geshifilter_get_available_languages();
   foreach ($languages as $language => $language_data) {
-    $enabled = config_get('geshifilter.settings', "language_enabled_{$language}");
+    $enabled = config_get('geshifilter.settings', "geshifilter_language_enabled_{$language}");
     // skip items to hide
     if (($view == 'enabled' && !$enabled) || ($view == 'disabled' && $enabled)) {
       continue;
@@ -564,7 +564,7 @@ function theme_geshifilter_per_language_settings($variables) {
  * Helper function for flushing the GeSHi language definition cache.
  */
 function _geshifilter_flush_language_definition_cache() {
-  if (GESHIFILTER_CSS_CLASSES_AUTOMATIC == config_get('geshifilter.settings', 'css_mode')) {
+  if (GESHIFILTER_CSS_CLASSES_AUTOMATIC == config_get('geshifilter.settings', 'geshifilter_css_mode')) {
     // Forced regeneration of the CSS file
     _geshifilter_generate_languages_css_file(TRUE);
   }
@@ -639,7 +639,7 @@ function _geshifilter_generate_languages_css_file($force = FALSE) {
   $languages_hash = serialize($languages);
 
   // Check if generation of the CSS file is needed
-  if ($force || $languages_hash != config_get('geshifilter.settings', 'cssfile_languages')) {
+  if ($force || $languages_hash != config_get('geshifilter.settings', 'geshifilter_cssfile_languages')) {
     // Build stylesheet.
     $stylesheet = _geshifilter_generate_languages_css_rules();
     // Save stylesheet.
@@ -653,6 +653,6 @@ function _geshifilter_generate_languages_css_file($force = FALSE) {
         array('!filesystem' => url('admin/config/media/file-system'))), 'error');
     }
     // Remember for which list of languages the CSS file was generated
-    config_set('geshifilter.settings', 'cssfile_languages', $languages_hash);
+    config_set('geshifilter.settings', 'geshifilter_cssfile_languages', $languages_hash);
   }
 }

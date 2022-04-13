@@ -183,7 +183,7 @@ function _geshifilter_prepare_callback($match, $format) {
   }
 
   // get the default highlighting mode
-  $lang = config_get('geshifilter.settings', 'default_highlighting');
+  $lang = config_get('geshifilter.settings', 'geshifilter_default_highlighting');
   if ($lang == GESHIFILTER_DEFAULT_DONOTHING) {
     // If the default highlighting mode is GESHIFILTER_DEFAULT_DONOTHING
     // and there is no language set (with language tag or language attribute),
@@ -276,8 +276,8 @@ function _geshifilter_replace_callback($match, $format) {
   $source_code = decode_entities($source_code);
 
   // Initialize to default settings.
-  $lang = $config->get('default_highlighting');
-  $line_numbering = $config->get('default_line_numbering');
+  $lang = $config->get('geshifilter_default_highlighting');
+  $line_numbering = $config->get('geshifilter_default_line_numbering');
   $linenumbers_start = 1;
   $title = NULL;
 
@@ -329,7 +329,7 @@ function _geshifilter_override_geshi_defaults(&$geshi, $langcode) {
   // overall class needed for CSS
   $geshi->set_overall_class('geshifilter-' . $langcode);
   // set keyword linking
-  $geshi->enable_keyword_links(config_get('geshifilter.settings', 'enable_keyword_urls'));
+  $geshi->enable_keyword_links(config_get('geshifilter.settings', 'geshifilter_enable_keyword_urls'));
 }
 
 /**
@@ -337,7 +337,7 @@ function _geshifilter_override_geshi_defaults(&$geshi, $langcode) {
  */
 function geshifilter_process_sourcecode($source_code, $lang, $line_numbering = 0, $linenumbers_start = 1, $inline_mode = FALSE, $title = NULL) {
   // process
-  if ($lang == 'php' && config_get('geshifilter.settings', 'use_highlight_string_for_php')) {
+  if ($lang == 'php' && config_get('geshifilter.settings', 'geshifilter_use_highlight_string_for_php')) {
     return geshifilter_highlight_string_process($source_code, $inline_mode);
   }
   else {
@@ -372,7 +372,7 @@ function geshifilter_geshi_process($source_code, $lang, $line_numbering = 0, $li
   $geshi = _geshifilter_geshi_factory($source_code, $lang);
 
   // CSS mode
-  $ccs_mode = $config->get('css_mode');
+  $ccs_mode = $config->get('geshifilter_css_mode');
   if ($ccs_mode == GESHIFILTER_CSS_CLASSES_AUTOMATIC || $ccs_mode == GESHIFILTER_CSS_CLASSES_ONLY) {
     $geshi->enable_classes(TRUE);
   }
@@ -397,7 +397,7 @@ function geshifilter_geshi_process($source_code, $lang, $line_numbering = 0, $li
   }
   else {
     // block source code mode
-    $geshi->set_header_type((int) $config->get('code_container'));
+    $geshi->set_header_type((int) $config->get('geshifilter_code_container'));
     if ($line_numbering == 1) {
       $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
       $geshi->start_line_numbers_at($linenumbers_start);

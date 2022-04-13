@@ -125,7 +125,7 @@ function geshifilter_config_info() {
 function geshifilter_init() {
   // Since the filtered content is cached, it is not possible to know on which
   // pages the css file is actually needed. Thus it is included on all pages.
-  if (config_get('geshifilter.settings', 'css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
+  if (config_get('geshifilter.settings', 'geshifilter_css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC) {
     backdrop_add_css(_geshifilter_language_css_path());
   }
   backdrop_add_css(backdrop_get_path('module', 'geshifilter') . '/geshifilter.css');
@@ -228,7 +228,7 @@ function geshifilter_requirements($phase) {
     }
 
     // Warn if GeSHi filter is configured to automatically managed external stylesheet when it's not possible
-    if (config_get('geshifilter.settings', 'css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !_geshifilter_managed_external_stylesheet_possible()) {
+    if (config_get('geshifilter.settings', 'geshifilter_css_mode') == GESHIFILTER_CSS_CLASSES_AUTOMATIC && !_geshifilter_managed_external_stylesheet_possible()) {
       $requirements[] = array(
         'title' => 'GeSHi filter CSS mode',
         'value' => t('GeSHi filter can not automatically manage an external style sheet when the download method is private.'),
@@ -313,11 +313,11 @@ function geshifilter_filter_admin_form_submit($form, &$form_state) {
   if (isset($form_state['values']['filters']['geshifilter']['settings'])) {
     $values = $form_state['values']['filters']['geshifilter']['settings'];
     $f = $form_state['values']['format'];
-    config_set('geshifilter.settings', "tags_{$f}", $values['general_tags']["tags_{$f}"]);
-    config_set('geshifilter.settings', "tag_styles_{$f}", $values['general_tags']["tag_styles_{$f}"]);
+    config_set('geshifilter.settings', "geshifilter_tags_{$f}", $values['general_tags']["tags_{$f}"]);
+    config_set('geshifilter.settings', "geshifilter_tag_styles_{$f}", $values['general_tags']["tag_styles_{$f}"]);
     $languages = $values['per_language_settings']['table']['languages'];
     foreach ($languages as $key => $value) {
-      config_set('geshifilter.settings', "language_tags_{$key}_{$f}", $value["language_tags_{$key}_{$f}"]);
+      config_set('geshifilter.settings', "geshifilter_language_tags_{$key}_{$f}", $value["language_tags_{$key}_{$f}"]);
     }
   }
 }
