@@ -9,17 +9,28 @@
  * Implements hook_install().
  */
 function geshifilter_install() {
-  // Enable some popular languages and set their language tags by default
-  $languages = array('php', 'drupal7', 'javascript', 'java', 'c', 'cpp', 'python', 'ruby');
+  // Enable some popular languages and set their language tags by default.
+  $languages = array(
+    'php',
+    'drupal7',
+    'javascript',
+    'java',
+    'c',
+    'cpp',
+    'python',
+    'ruby',
+  );
   foreach ($languages as $language) {
     config_set('geshifilter.settings', 'language_enabled_' . $language, TRUE);
     config_set('geshifilter.settings', 'language_tags_' . $language, '<' . $language . '>');
   }
 
-  // what to do next?
+  // What to do next?
   backdrop_set_message(t('GeSHi filter is installed. You should now <a href="!geshi_admin">configure the GeSHi filter</a> and enable it in the desired <a href="!input_formats">text formats</a>.',
-    array('!geshi_admin' => url('admin/config/content/formats/geshifilter'), '!input_formats' => url('admin/config/content/formats'))
-  ));
+    array(
+      '!geshi_admin' => url('admin/config/content/formats/geshifilter'),
+      '!input_formats' => url('admin/config/content/formats'),
+    )));
 }
 
 /**
