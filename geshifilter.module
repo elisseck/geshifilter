@@ -135,7 +135,7 @@ function geshifilter_init() {
  * Filter-Tips callback.
  */
 function geshifilter_filter_tips($delta, $format, $long = FALSE) {
-  require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.filtertips.inc';
+  require_once __DIR__ . '/geshifilter.filtertips.inc';
   return _geshifilter_filter_tips($delta, $format, $long);
 }
 
@@ -164,7 +164,7 @@ function geshifilter_filter_info() {
  * Prepare callback for the GeSHi filter.
  */
 function geshifilter_prepare_callback($text, $filter) {
-  require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.pages.inc';
+  require_once __DIR__ . '/geshifilter.pages.inc';
   return _geshifilter_prepare($filter->format, $text);
 }
 
@@ -172,16 +172,15 @@ function geshifilter_prepare_callback($text, $filter) {
  * Process callback for the GeSHi filter.
  */
 function geshifilter_process_callback($text, $filter) {
-  require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.pages.inc';
+  require_once __DIR__ . '/geshifilter.pages.inc';
   return _geshifilter_process($filter->format, $text);
 }
 
 /**
  * Settings callback for the GeSHi filter.
  */
-function geshifilter_filter_settings_callback($form, &$form_state, $filter, $format, $defaults, $filters) {
-  require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
-  return _geshifilter_filter_settings($form, $form_state, $filter, $format, $defaults, $filters);
+function geshifilter_filter_settings_callback($form, &$form_state, $filter, $format) {
+  return _geshifilter_filter_settings($form, $form_state, $filter, $format);
 }
 
 /**
@@ -201,7 +200,7 @@ function geshifilter_theme() {
 function geshifilter_requirements($phase) {
   $requirements = array();
   if ($phase == 'runtime') {
-    require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.inc';
+    require_once __DIR__ . '/geshifilter.inc';
     // check if GeSHi library is available
     $geshi_library = libraries_load('geshi');
     if (!$geshi_library['loaded']) {
@@ -240,7 +239,7 @@ function geshifilter_requirements($phase) {
     }
 
     // check for filter conflicts
-    require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.conflicts.inc';
+    require_once __DIR__ . '/geshifilter.conflicts.inc';
     if (geshifilter_admin_filter_conflicts(TRUE) > 0) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
@@ -290,7 +289,7 @@ function _geshifilter_managed_external_stylesheet_possible() {
  * Callback function for generating the CSS rules for the syntax highlighting.
  */
 function geshifilter_generate_language_css_rules() {
-  require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.admin.inc';
+  require_once __DIR__ . '/geshifilter.admin.inc';
   backdrop_add_http_header("Content-type", "text/css");
   $output = _geshifilter_generate_languages_css_rules();
   print($output);
@@ -328,6 +327,7 @@ function geshifilter_filter_admin_form_submit($form, &$form_state) {
  * @see http://drupal.org/node/1354
  */
 function geshifilter_form_filter_admin_format_form_alter(&$form, &$form_state, $form_id) {
+  form_load_include($form_state, 'inc', 'geshifilter', 'geshifilter.admin');
   $form['#submit'][] = 'geshifilter_filter_admin_form_submit';
   $form['#validate'][] = 'geshifilter_per_filter_language_settings_validate';
 }
