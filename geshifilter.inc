@@ -12,7 +12,7 @@
  */
 function _geshifilter_get_available_languages() {
   // try to get it from cache (database actually)
-  $available_languages = config_get('geshifilter.settings', 'geshifilter_available_languages_cache');
+  $available_languages = config_get('geshifilter.settings', 'available_languages_cache');
   if ($available_languages === NULL) {
     // not in cache: build the array of available_languages
     $geshi_library = libraries_load('geshi');
@@ -34,7 +34,7 @@ function _geshifilter_get_available_languages() {
       }
       ksort($available_languages);
       // save array to database
-      config_set('geshifilter.settings', 'geshifilter_available_languages_cache', $available_languages);
+      config_set('geshifilter.settings', 'available_languages_cache', $available_languages);
     }
   }
   return $available_languages;
@@ -51,7 +51,7 @@ function _geshifilter_get_enabled_languages() {
     $enabled_languages = array();
     $languages = _geshifilter_get_available_languages();
     foreach ($languages as $language => $language_data) {
-      if (config_get('geshifilter.settings', 'geshifilter_language_enabled_' . $language)) {
+      if (config_get('geshifilter.settings', 'language_enabled_' . $language)) {
         $enabled_languages[$language] = $language_data['fullname'];
       }
     }
@@ -116,7 +116,7 @@ function _geshifilter_tag_split($string) {
  * @see http://drupal.org/node/1354
  */
 function geshifilter_use_format_specific_options() {
-  return config_get('geshifilter.settings', 'geshifilter_format_specific_options');
+  return config_get('geshifilter.settings', 'format_specific_options');
 }
 
 /**
@@ -126,9 +126,9 @@ function geshifilter_use_format_specific_options() {
 function geshifilter_tags($format = NULL) {
   $config = config('geshifilter.settings');
   if (!geshifilter_use_format_specific_options() || $format === NULL) {
-    return $config->get('geshifilter_tags');
+    return $config->get('tags');
   }
-  return $config->get("geshifilter_tags_{$format}");
+  return $config->get("tags_{$format}");
 }
 
 /**
@@ -138,9 +138,9 @@ function geshifilter_tags($format = NULL) {
 function geshifilter_decode_entities($format = NULL) {
   $config = config('geshifilter.settings');
   if (!geshifilter_use_format_specific_options() || $format === NULL) {
-    return $config->get('geshifilter_decode_entities');
+    return $config->get('decode_entities');
   }
-  return $config->get("geshifilter_decode_entities_{$format}");
+  return $config->get("decode_entities_{$format}");
 }
 
 /**
@@ -150,9 +150,9 @@ function geshifilter_decode_entities($format = NULL) {
 function _geshifilter_tag_styles($format = NULL) {
   $config = config('geshifilter.settings');
   if (!geshifilter_use_format_specific_options() || $format === NULL) {
-    return $config->get('geshifilter_tag_styles');
+    return $config->get('tag_styles');
   }
-  return $config->get("geshifilter_tag_styles_{$format}");
+  return $config->get("tag_styles_{$format}");
 }
 
 /**
@@ -162,7 +162,7 @@ function _geshifilter_tag_styles($format = NULL) {
 function geshifilter_language_tags($language, $format = NULL) {
   $config = config('geshifilter.settings');
   if (!geshifilter_use_format_specific_options() || $format === NULL) {
-    return $config->get("geshifilter_language_tags_{$language}");
+    return $config->get("language_tags_{$language}");
   }
-  return $config->get("geshifilter_language_tags_{$language}_{$format}");
+  return $config->get("language_tags_{$language}_{$format}");
 }

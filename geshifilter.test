@@ -43,7 +43,7 @@ class GeshiFilterAdministrationTest extends BackdropWebTestCase {
     // Make sure the GeSHi filter module is enabled.
     parent::setUp('geshifilter');
     // And set the path to the geshi library.
-    config_set('geshifilter.settings', 'geshifilter_geshi_dir', 'sites/all/libraries/geshi');
+    config_set('geshifilter.settings', 'geshi_dir', 'sites/all/libraries/geshi');
 
     // Create a filter admin user
     $permissions = array('administer filters', 'administer site configuration');
@@ -59,12 +59,12 @@ class GeshiFilterAdministrationTest extends BackdropWebTestCase {
     $this->input_format_id = 'geshifilter_text_format';
 
     // set some default GeSHi filter admin settings
-    config_set('geshifilter.settings', 'geshifilter_format_specific_options', FALSE);
-    config_set('geshifilter.settings', 'geshifilter_tag_styles', array(
+    config_set('geshifilter.settings', 'format_specific_options', FALSE);
+    config_set('geshifilter.settings', 'tag_styles', array(
       GESHIFILTER_BRACKETS_ANGLE => GESHIFILTER_BRACKETS_ANGLE,
       GESHIFILTER_BRACKETS_SQUARE => GESHIFILTER_BRACKETS_SQUARE,
     ));
-    config_set('geshifilter.settings', 'geshifilter_default_line_numbering', GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE);
+    config_set('geshifilter.settings', 'default_line_numbering', GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE);
 
   }
 
@@ -94,12 +94,12 @@ class GeshiFilterAdministrationTest extends BackdropWebTestCase {
    */
   function test_tag_unicity() {
     // enable some languages first
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_php', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_python', TRUE);
+    config_set('geshifilter.settings', 'language_enabled_php', TRUE);
+    config_set('geshifilter.settings', 'language_enabled_python', TRUE);
 
     // first round: without format specific tag options
-    config_set('geshifilter.settings', 'geshifilter_format_specific_options', FALSE);
-    config_set('geshifilter.settings', 'geshifilter_tags', 'code blockcode generictag');
+    config_set('geshifilter.settings', 'format_specific_options', FALSE);
+    config_set('geshifilter.settings', 'tags', 'code blockcode generictag');
 
     // a language tag should differ from the generic tags
     $form_values = array(
@@ -117,8 +117,8 @@ class GeshiFilterAdministrationTest extends BackdropWebTestCase {
     $this->assertText(t('The language tags should differ between languages and from the generic tags.'), t('Language tags should differ between languages (with generic tag options)'));
 
     // second round: with format specific tag options
-    config_set('geshifilter.settings', 'geshifilter_format_specific_options', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_tags_' . $this->input_format_id, 'code blockcode generictag');
+    config_set('geshifilter.settings', 'format_specific_options', TRUE);
+    config_set('geshifilter.settings', 'tags_' . $this->input_format_id, 'code blockcode generictag');
 
     // a language tag should differ from the generic tags
     $form_values = array(
@@ -179,7 +179,7 @@ class GeshiFilterTest extends BackdropWebTestCase {
     // Make sure that Geshi filter module is enabled.
     parent::setUp('geshifilter');
     // And set the path to the geshi library.
-    config_set('geshifilter.settings', 'geshifilter_geshi_dir', 'sites/all/libraries/geshi');
+    config_set('geshifilter.settings', 'geshi_dir', 'sites/all/libraries/geshi');
 
     // Create a filter admin user
     $permissions = array(
@@ -204,13 +204,13 @@ class GeshiFilterTest extends BackdropWebTestCase {
 
     // set some default GeSHi filter admin settings
     // Set default highlighting mode to "do nothing".
-    config_set('geshifilter.settings', 'geshifilter_default_highlighting', GESHIFILTER_DEFAULT_PLAINTEXT);
-    config_set('geshifilter.settings', 'geshifilter_format_specific_options', FALSE);
-    config_set('geshifilter.settings', 'geshifilter_tag_styles', array(
+    config_set('geshifilter.settings', 'default_highlighting', GESHIFILTER_DEFAULT_PLAINTEXT);
+    config_set('geshifilter.settings', 'format_specific_options', FALSE);
+    config_set('geshifilter.settings', 'tag_styles', array(
       GESHIFILTER_BRACKETS_ANGLE => GESHIFILTER_BRACKETS_ANGLE,
       GESHIFILTER_BRACKETS_SQUARE => GESHIFILTER_BRACKETS_SQUARE,
     ));
-    config_set('geshifilter.settings', 'geshifilter_default_line_numbering', GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE);
+    config_set('geshifilter.settings', 'default_line_numbering', GESHIFILTER_LINE_NUMBERS_DEFAULT_NONE);
 
     // log out as filter admin
     $this->backdropGet('logout');
@@ -291,11 +291,11 @@ class GeshiFilterTest extends BackdropWebTestCase {
    * Test the standard functionality of the generic tags
    */
   function testGenericTags() {
-    config_set('geshifilter.settings', 'geshifilter_tags', 'code');
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_c', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_cpp', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_csharp', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_java', TRUE);
+    config_set('geshifilter.settings', 'tags', 'code');
+    config_set('geshifilter.settings', 'language_enabled_c', TRUE);
+    config_set('geshifilter.settings', 'language_enabled_cpp', TRUE);
+    config_set('geshifilter.settings', 'language_enabled_csharp', TRUE);
+    config_set('geshifilter.settings', 'language_enabled_java', TRUE);
 
     // body material
     $source_code = "//C++-ish source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
@@ -339,11 +339,11 @@ class GeshiFilterTest extends BackdropWebTestCase {
 
 
   function testBracketsOnlyAngle() {
-    config_set('geshifilter.settings', 'geshifilter_tags', 'code');
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_cpp', TRUE);
+    config_set('geshifilter.settings', 'tags', 'code');
+    config_set('geshifilter.settings', 'language_enabled_cpp', TRUE);
     $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
     // Enable only angle brackets
-    config_set('geshifilter.settings', 'geshifilter_tag_styles', array(
+    config_set('geshifilter.settings', 'tag_styles', array(
       GESHIFILTER_BRACKETS_ANGLE => GESHIFILTER_BRACKETS_ANGLE,
     ));
     // This should be filtered.
@@ -363,11 +363,11 @@ class GeshiFilterTest extends BackdropWebTestCase {
   }
 
   function testBracketsOnlySquare() {
-    config_set('geshifilter.settings', 'geshifilter_tags', 'code');
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_cpp', TRUE);
+    config_set('geshifilter.settings', 'tags', 'code');
+    config_set('geshifilter.settings', 'language_enabled_cpp', TRUE);
     $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
     // Enable only square brackets
-    config_set('geshifilter.settings', 'geshifilter_tag_styles', array(
+    config_set('geshifilter.settings', 'tag_styles', array(
       GESHIFILTER_BRACKETS_SQUARE => GESHIFILTER_BRACKETS_SQUARE,
     ));
     // This should be filtered.
@@ -387,11 +387,11 @@ class GeshiFilterTest extends BackdropWebTestCase {
   }
 
   function testBracketsOnlyDoubleSquare() {
-    config_set('geshifilter.settings', 'geshifilter_tags', 'code');
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_cpp', TRUE);
+    config_set('geshifilter.settings', 'tags', 'code');
+    config_set('geshifilter.settings', 'language_enabled_cpp', TRUE);
     $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
     // Enable only double square brackets
-    config_set('geshifilter.settings', 'geshifilter_tag_styles', array(
+    config_set('geshifilter.settings', 'tag_styles', array(
       GESHIFILTER_BRACKETS_DOUBLESQUARE => GESHIFILTER_BRACKETS_DOUBLESQUARE,
     ));
     // This should be filtered.
@@ -411,11 +411,11 @@ class GeshiFilterTest extends BackdropWebTestCase {
   }
 
   function testBracketsOnlyPhpCodeBlock() {
-    config_set('geshifilter.settings', 'geshifilter_tags', 'code');
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_cpp', TRUE);
+    config_set('geshifilter.settings', 'tags', 'code');
+    config_set('geshifilter.settings', 'language_enabled_cpp', TRUE);
     $source_code = "//C++ source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
     // Enable only double square brackets
-    config_set('geshifilter.settings', 'geshifilter_tag_styles', array(
+    config_set('geshifilter.settings', 'tag_styles', array(
       GESHIFILTER_BRACKETS_PHPBLOCK => GESHIFILTER_BRACKETS_PHPBLOCK,
     ));
     // This should be filtered.
@@ -441,10 +441,10 @@ class GeshiFilterTest extends BackdropWebTestCase {
    */
   function testSpecialTags() {
     // Enabled the tags
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_cpp', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_language_tags_cpp', 'c++');
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_csharp', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_language_tags_csharp', 'c#');
+    config_set('geshifilter.settings', 'language_enabled_cpp', TRUE);
+    config_set('geshifilter.settings', 'language_tags_cpp', 'c++');
+    config_set('geshifilter.settings', 'language_enabled_csharp', TRUE);
+    config_set('geshifilter.settings', 'language_tags_csharp', 'c#');
     // body material
     $source_code = "//C++-ish source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
     // Test the tags
@@ -461,12 +461,12 @@ class GeshiFilterTest extends BackdropWebTestCase {
    */
   function testPrefixTags() {
     // enabled the tags
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_c', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_language_tags_c', 'c');
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_cpp', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_language_tags_cpp', 'cpp');
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_csharp', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_language_tags_csharp', 'csharp');
+    config_set('geshifilter.settings', 'language_enabled_c', TRUE);
+    config_set('geshifilter.settings', 'language_tags_c', 'c');
+    config_set('geshifilter.settings', 'language_enabled_cpp', TRUE);
+    config_set('geshifilter.settings', 'language_tags_cpp', 'cpp');
+    config_set('geshifilter.settings', 'language_enabled_csharp', TRUE);
+    config_set('geshifilter.settings', 'language_tags_csharp', 'csharp');
     // body material
     $source_code = "//C++-ish source code\nfor (int i=0; i<10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n server->start(&pool); \n}";
     // Test the tags
@@ -480,10 +480,10 @@ class GeshiFilterTest extends BackdropWebTestCase {
 
   function testDoNothingMode() {
     // Enable C++.
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_cpp', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_language_tags_cpp', 'cpp');
+    config_set('geshifilter.settings', 'language_enabled_cpp', TRUE);
+    config_set('geshifilter.settings', 'language_tags_cpp', 'cpp');
     // Set default highlighting mode to "do nothing".
-    config_set('geshifilter.settings', 'geshifilter_default_highlighting', GESHIFILTER_DEFAULT_DONOTHING);
+    config_set('geshifilter.settings', 'default_highlighting', GESHIFILTER_DEFAULT_DONOTHING);
     // Body material with some characters ('<' and '&') that would be escaped
     // except in "do nothing" mode
     $source_code = "//C++-ish source code\nfor (int i=0; i!=10; ++i) {\n  fun(i);\n  bar.foo(x, y);\n}";
@@ -536,11 +536,11 @@ class GeshiFilterTest extends BackdropWebTestCase {
    * Issue http://drupal.org/node/1010216
    */
   function testSquareBracketConfusion() {
-    config_set('geshifilter.settings', 'geshifilter_tags', 'code');
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_ini', TRUE);
+    config_set('geshifilter.settings', 'tags', 'code');
+    config_set('geshifilter.settings', 'language_enabled_ini', TRUE);
     $source_code = "[section]\nserver=192.0.2.62  ; IP address\nport=12345";
     // Enable square brackets
-    config_set('geshifilter.settings', 'geshifilter_tag_styles', array(
+    config_set('geshifilter.settings', 'tag_styles', array(
       GESHIFILTER_BRACKETS_SQUARE => GESHIFILTER_BRACKETS_SQUARE,
     ));
     // This should be filtered.
@@ -556,9 +556,9 @@ class GeshiFilterTest extends BackdropWebTestCase {
    * Issue https://www.drupal.org/node/2047021.
    */
   public function testSpecialChars() {
-    config_set('geshifilter.settings', 'geshifilter_tags', 'code');
-    config_set('geshifilter.settings', 'geshifilter_language_enabled_php', TRUE);
-    config_set('geshifilter.settings', 'geshifilter_decode_entities', TRUE);
+    config_set('geshifilter.settings', 'tags', 'code');
+    config_set('geshifilter.settings', 'language_enabled_php', TRUE);
+    config_set('geshifilter.settings', 'decode_entities', TRUE);
 
     $source = '<code language="php"><?php echo("&lt;b&gt;Hi&lt;/b&gt;"); ?></code>';
 
