@@ -5,14 +5,16 @@
  * Implementation of administration functionality.
  */
 
-require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.inc';
+require_once __DIR__ . '/geshifilter.inc';
 
 define('GESHIFILTER_FLUSH_LANGUAGE_DEFINITION_CACHE_TEXT', 'Flush the GeSHi language definition cache');
 
 /**
  * Form (items) for filter settings.
  */
-function _geshifilter_filter_settings($form, &$form_state, $filter, $format, $defaults, $filters) {
+function _geshifilter_filter_settings($form, &$form_state, $filter, $format) {
+  form_load_include($form_state, 'inc', 'geshifilter', 'geshifilter.admin');
+
   if (geshifilter_use_format_specific_options()) {
     // tags and attributes
     $settings['general_tags'] = _geshifilter_general_highlight_tags_settings($format);
