@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Installation and uninstallation functions for the GeSHi filter.
+ * Install and uninstall functions for the GeSHi filter.
  */
 
 /**
@@ -10,7 +10,7 @@
  */
 function geshifilter_install() {
   // Enable some popular languages and set their language tags by default
-  $languages = array('php', 'backdrop5', 'backdrop6', 'javascript', 'java', 'c', 'cpp', 'python', 'ruby');
+  $languages = array('php', 'drupal7', 'javascript', 'java', 'c', 'cpp', 'python', 'ruby');
   foreach ($languages as $language) {
     config_set('geshifilter.settings', 'language_enabled_' . $language, TRUE);
     config_set('geshifilter.settings', 'language_tags_' . $language, '<' . $language . '>');
@@ -20,14 +20,6 @@ function geshifilter_install() {
   backdrop_set_message(t('GeSHi filter is installed. You should now <a href="!geshi_admin">configure the GeSHi filter</a> and enable it in the desired <a href="!input_formats">text formats</a>.',
     array('!geshi_admin' => url('admin/config/content/formats/geshifilter'), '!input_formats' => url('admin/config/content/formats'))
   ));
-  // Dynamically generated variable data was detected on the following lines.
-  // /geshifilter/geshifilter.inc line 54
-  // /geshifilter/geshifilter.inc line 118
-  // /geshifilter/geshifilter.inc line 125
-  // /geshifilter/geshifilter.inc line 130
-  // /geshifilter/geshifilter.inc line 135
-  // /geshifilter/geshifilter.inc line 140
-  // /geshifilter/geshifilter.inc line 142
 }
 
 /**
@@ -37,9 +29,6 @@ function geshifilter_uninstall() {
   db_query("DELETE FROM {variable} WHERE name LIKE 'geshifilter_%'");
   cache_clear_all('variables', 'cache');
 }
-
-// TODO The old hook_update_N functions cannot be applied to Backdrop.
-function geshifilter_update_7100() { }
 
 /**
  * Implements hook_update_last_removed().
