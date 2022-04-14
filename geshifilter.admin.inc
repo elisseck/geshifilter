@@ -431,7 +431,7 @@ function geshifilter_admin_per_language_settings_submit($form, &$form_state) {
 function _geshifilter_general_highlight_tags_settings($format = NULL) {
   $form = array();
   $f = ($format === NULL) ? '' : "_$format->format";
-  $format_id = ($format === NULL)?NULL : $format->format;
+  $format_id = ($format === NULL) ? NULL : $format->format;
 
   // generic tags
   $form["geshifilter_tags$f"] = array(
@@ -440,7 +440,7 @@ function _geshifilter_general_highlight_tags_settings($format = NULL) {
     '#default_value' => geshifilter_tags($format_id),
     '#description' => t('Tags that should activate the GeSHi syntax highlighting. Specify a space-separated list of tagnames.'),
   );
-
+  
   // Decode entities.
   $form["geshifilter_decode_entities$f"] = array(
     '#type' => 'checkbox',
