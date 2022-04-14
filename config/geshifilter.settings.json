@@ -14,7 +14,12 @@
     "geshifilter_tags_format": "NULL",
     "geshifilter_decode_entities": "0",
     "geshifilter_decode_entities_format": false,
-    "geshifilter_tag_styles": false,
+    "geshifilter_tag_styles": {
+        "8": "8",
+        "1": "1",
+        "2": "2",
+        "4": "3"
+    },
     "geshifilter_tag_styles_format": false,
     "geshifilter_language_tags_language": false,
     "geshifilter_language_tags_language_format": false
