@@ -302,7 +302,7 @@ function geshifilter_per_language_settings_validate($form, &$form_state) {
     // iterate over the enabled languages: skip disabled ones
     $field = "geshifilter_language_enabled_{$language1}";
     // TODO This variable was probably removed in Backdrop without replacement.
-    if (!(isset($form_state['values'][$field]) ? $form_state['values'][$field] : variable_get($field, FALSE))) {
+    if (!(isset($form_state['values'][$field]) ? $form_state['values'][$field] : config_get('geshifilter.settings', $field, FALSE))) {
       continue;
     }
     // get the associated tags as $tags1
@@ -323,7 +323,7 @@ function geshifilter_per_language_settings_validate($form, &$form_state) {
       // check these tags against the tags of other enabled languages
       $field = "geshifilter_language_enabled_{$language2}";
       // TODO This variable was probably removed in Backdrop without replacement.
-      if ($language1 == $language2 || !(isset($form_state['values'][$field]) ? $form_state['values'][$field] : variable_get($field, FALSE))) {
+      if ($language1 == $language2 || !(isset($form_state['values'][$field]) ? $form_state['values'][$field] : config_get('geshifilter.settings', $field, FALSE))) {
         continue;
       }
       // get tags for $language2, or skip when not in $form_state['values']
@@ -366,7 +366,7 @@ function geshifilter_per_filter_language_settings_validate($form, &$form_state) 
       // iterate over the enabled languages: skip disabled ones
       $field = "geshifilter_language_enabled_{$language1}";
       // TODO This variable was probably removed in Backdrop without replacement.
-      if (!(isset($values[$language1][$field]) ? $values[$language1][$field] : variable_get($field, FALSE))) {
+      if (!(isset($values[$language1][$field]) ? $values[$language1][$field] : config_get(geshifilter.settings, $field, FALSE))) {
         continue;
       }
       // get the associated tags as $tags1
@@ -387,7 +387,7 @@ function geshifilter_per_filter_language_settings_validate($form, &$form_state) 
         // check these tags against the tags of other enabled languages
         $field = "geshifilter_language_enabled_{$language2}";
         // TODO This variable was probably removed in Backdrop without replacement.
-        if ($language1 == $language2 || !(isset($values[$language2][$field]) ? $values[$language2][$field] : variable_get($field, FALSE))) {
+        if ($language1 == $language2 || !(isset($values[$language2][$field]) ? $values[$language2][$field] : config_get('geshifilter.settings', $field, FALSE))) {
           continue;
         }
         // get tags for $language2, or skip when not in $form_state['values']
@@ -652,7 +652,7 @@ function _geshifilter_generate_languages_css_file($force = FALSE) {
       backdrop_set_message(t('Could not generate external CSS file. Check the settings of your <a href="!filesystem">file system</a>.',
         array('!filesystem' => url('admin/config/media/file-system'))), 'error');
     }
-    // Remember for which list of languages the CSS file was generated
+    // Remember for which list of languages the CSS file was generated.
     config_set('geshifilter.settings', 'geshifilter_cssfile_languages', $languages_hash);
   }
 }

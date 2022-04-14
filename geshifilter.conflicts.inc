@@ -81,7 +81,7 @@ function _geshifilter_htmlfilter_conflicts($format, $cfilter, $geshifilter) {
   }
   // check tag escaping of html filter
   // TODO This variable was probably removed in Backdrop without replacement.
-  if (variable_get("filter_html_$format", FILTER_HTML_STRIP) == FILTER_HTML_ESCAPE) {
+  if (state_get("filter_html_$format", FILTER_HTML_STRIP) == FILTER_HTML_ESCAPE) {
     $conflicts[] = array(
       'description' => t('%cfilter is configured to "Escape all tags", which is likely to cause problems with %geshifilter.',
         array('%cfilter' => $cfilter->name, '%geshifilter' => $geshifilter->name)),
