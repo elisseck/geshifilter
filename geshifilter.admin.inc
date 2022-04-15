@@ -16,16 +16,16 @@ function _geshifilter_filter_settings($form, &$form_state, $filter, $format) {
   form_load_include($form_state, 'inc', 'geshifilter', 'geshifilter.admin');
 
   if (geshifilter_use_format_specific_options()) {
-    // tags and attributes
-    $settings['general_tags'] = _geshifilter_general_highlight_tags_settings($format);
+    // Tags and attributes.
+    $settings['general_tags'] = _geshifilter_general_highlight_tags_settings($filter);
     $settings['#validate'][] = '_geshifilter_tag_styles_validate';
-    // per language tags
+    // Per language tags.
     $settings['per_language_settings'] = array(
       '#type' => 'fieldset',
       '#title' => t('Per language tags'),
-      '#collapsible' => TRUE,
-      'table' => geshifilter_per_language_settings($format->format, 'enabled', FALSE, TRUE),
+      '#collapsible' => TRUE,      
     );
+    $settings['per_language_settings']['table'] = geshifilter_per_language_settings($filter, 'enabled', FALSE, TRUE);
   }
   else {
     $settings['info'] = array(
@@ -428,29 +428,27 @@ function geshifilter_admin_per_language_settings_submit($form, &$form_state) {
  *
  * @param stdClass $format format object (e.g. with field $format->format).
  */
-function _geshifilter_general_highlight_tags_settings($format = NULL) {
+function _geshifilter_general_highlight_tags_settings($filter = NULL) {
   $form = array();
-  $f = ($format === NULL) ? '' : "_$format->format";
-  $format_id = ($format === NULL) ? NULL : $format->format;
 
   // generic tags
-  $form["geshifilter_tags$f"] = array(
+  $form["geshifilter_tags"] = array(
     '#type' => 'textfield',
     '#title' => t('Generic syntax highlighting tags'),
-    '#default_value' => geshifilter_tags($format_id),
+    '#default_value' => geshifilter_tags($filter),
     '#description' => t('Tags that should activate the GeSHi syntax highlighting. Specify a space-separated list of tagnames.'),
   );
   
   // Decode entities.
-  $form["geshifilter_decode_entities$f"] = array(
+  $form["geshifilter_decode_entities"] = array(
     '#type' => 'checkbox',
     '#title' => t('Decode entities'),
-    '#default_value' => geshifilter_decode_entities($format_id),
+    '#default_value' => geshifilter_decode_entities($filter),
     '#description' => t('Decode entities, for example, if the code has been typed in a WYSIWYG editor.'),
   );
 
   // Container tag styles.
-  $form["geshifilter_tag_styles$f"] = array(
+  $form["geshifilter_tag_styles"] = array(
     '#type' => 'checkboxes',
     '#title' => t('Container tag style'),
     '#options' => array(
@@ -462,7 +460,7 @@ function _geshifilter_general_highlight_tags_settings($format = NULL) {
         '!percent' =>  '<code>' . check_plain('<% ... %>') . '</code>',
       )),
     ),
-    '#default_value' => _geshifilter_tag_styles($format_id),
+    '#default_value' => _geshifilter_tag_styles($filter),
     '#description' => t('Select the container tag styles that should trigger GeSHi syntax highlighting.'),
   );
   return $form;
@@ -471,7 +469,7 @@ function _geshifilter_general_highlight_tags_settings($format = NULL) {
 /**
  * Function for generating a form table for per language settings.
  */
-function geshifilter_per_language_settings($format, $view, $add_checkbox, $add_tag_option) {
+function geshifilter_per_language_settings($filter, $view, $add_checkbox, $add_tag_option) {
   $form = array(
     '#theme' => 'geshifilter_per_language_settings',
   );
@@ -488,7 +486,7 @@ function geshifilter_per_language_settings($format, $view, $add_checkbox, $add_t
   // table body
   $form['languages'] = array();
   $languages = _geshifilter_get_available_languages();
-  foreach ($languages as $language => $language_data) {
+  foreach ($languages as $language => $language_data) {    
     $enabled = config_get('geshifilter.settings', "geshifilter_language_enabled_{$language}");
     // skip items to hide
     if (($view == 'enabled' && !$enabled) || ($view == 'disabled' && $enabled)) {
@@ -500,7 +498,7 @@ function geshifilter_per_language_settings($format, $view, $add_checkbox, $add_t
     if ($add_checkbox) {
       $form['languages'][$language]["geshifilter_language_enabled_{$language}"] = array(
         '#type' => 'checkbox',
-        '#default_value' => $enabled,
+        '#default_value' => $filter->settings["geshifilter_language_enabled_{$language}"],
         '#title' => $language_data['fullname'],
       );
     }
@@ -516,11 +514,10 @@ function geshifilter_per_language_settings($format, $view, $add_checkbox, $add_t
       '#markup' => $language,
     );
     // add a textfield for tags
-    if ($add_tag_option) {
-      $f = ($format === NULL) ? '' : "_$format";
-      $form['languages'][$language]["geshifilter_language_tags_{$language}{$f}"] = array(
+    if ($add_tag_option) {      
+      $form['languages'][$language]["geshifilter_language_tags_{$language}"] = array(
         '#type' => 'textfield',
-        '#default_value' => geshifilter_language_tags($language, $format),
+        '#default_value' => geshifilter_language_tags($language, $filter),
         '#size' => 20,
       );
     }

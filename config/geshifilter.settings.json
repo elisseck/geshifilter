@@ -9,9 +9,9 @@
     "geshifilter_language_enabled_language": false,
     "geshifilter_cssfile_languages": "",
     "geshifilter_available_languages_cache": "NULL",
-    "geshifilter_format_specific_options": 0,
+    "geshifilter_format_specific_options": false,
     "geshifilter_tags": "code blockcode",
-    "geshifilter_tags_format": "NULL",
+    "geshifilter_tags_format": "",
     "geshifilter_decode_entities": "0",
     "geshifilter_decode_entities_format": false,
     "geshifilter_tag_styles": {

@@ -123,46 +123,46 @@ function geshifilter_use_format_specific_options() {
  * @todo Please document this function.
  * @see http://drupal.org/node/1354
  */
-function geshifilter_tags($format = NULL) {
+function geshifilter_tags($filter = NULL) {
   $config = config('geshifilter.settings');
-  if (!geshifilter_use_format_specific_options() || $format === NULL) {
+  if (!geshifilter_use_format_specific_options() || $filter === NULL) {
     return $config->get('geshifilter_tags');
   }
-  return $config->get("geshifilter_tags_{$format}");
+  return $filter->settings['geshifilter_tags'];
 }
 
 /**
  * @todo Please document this function.
  * @see http://drupal.org/node/1354
  */
-function geshifilter_decode_entities($format = NULL) {
+function geshifilter_decode_entities($filter = NULL) {
   $config = config('geshifilter.settings');
-  if (!geshifilter_use_format_specific_options() || $format === NULL) {
+  if (!geshifilter_use_format_specific_options() || $filter === NULL) {
     return $config->get('geshifilter_decode_entities');
   }
-  return $config->get("geshifilter_decode_entities_{$format}");
+  return $filter->settings['geshifilter_decode_entities'];
 }
 
 /**
  * @todo Please document this function.
  * @see http://drupal.org/node/1354
  */
-function _geshifilter_tag_styles($format = NULL) {
+function _geshifilter_tag_styles($filter = NULL) {
   $config = config('geshifilter.settings');
-  if (!geshifilter_use_format_specific_options() || $format === NULL) {
+  if (!geshifilter_use_format_specific_options() || $filter === NULL) {
     return $config->get('geshifilter_tag_styles');
   }
-  return $config->get("geshifilter_tag_styles_{$format}");
+  return $filter->settings['geshifilter_tag_styles'];
 }
 
 /**
  * @todo Please document this function.
  * @see http://drupal.org/node/1354
  */
-function geshifilter_language_tags($language, $format = NULL) {
+function geshifilter_language_tags($language, $filter = NULL) {
   $config = config('geshifilter.settings');
-  if (!geshifilter_use_format_specific_options() || $format === NULL) {
+  if (!geshifilter_use_format_specific_options() || $filter === NULL) {
     return $config->get("geshifilter_language_tags_{$language}");
   }
-  return $config->get("geshifilter_language_tags_{$language}_{$format}");
+  return $filter->settings["geshifilter_language_tags_{$language}"];
 }
