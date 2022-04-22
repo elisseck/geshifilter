@@ -63,7 +63,7 @@ function _geshifilter_get_enabled_languages() {
  * Helper function for gettings the tags.
  * (with caching)
  */
-function _geshifilter_get_tags($format) {
+function _geshifilter_get_tags($format, $filter) {
   static $geshifilter_tags_cache = array();
 
   if (!isset($geshifilter_tags_cache[$format])) {
@@ -71,7 +71,7 @@ function _geshifilter_get_tags($format) {
     $language_tags = array();
     $tag_to_lang = array();
     $enabled_languages = _geshifilter_get_enabled_languages();
-    
+
     foreach ($enabled_languages as $language => $fullname) {
       $lang_tags = _geshifilter_tag_split(geshifilter_language_tags($language, $format));
 
@@ -80,9 +80,10 @@ function _geshifilter_get_tags($format) {
         $tag_to_lang[$lang_tag] = $language;
       }
     }
-    $geshifilter_tags_cache[$format] = array($generic_code_tags, $language_tags, $tag_to_lang);
+    $geshifilter_tags_cache[$filter->format] = array($generic_code_tags, $language_tags, $tag_to_lang);
   }
-  return $geshifilter_tags_cache[$format];
+  
+  return $geshifilter_tags_cache[$filter->format];
 }
 
 /**
@@ -126,36 +127,36 @@ function geshifilter_use_format_specific_options() {
  * @todo Please document this function.
  * @see http://drupal.org/node/1354
  */
-function geshifilter_tags($filter = NULL) {
+function geshifilter_tags($format = NULL) {
   $config = config('geshifilter.settings');
-  if (!geshifilter_use_format_specific_options() || $filter === NULL) {
+  if (!geshifilter_use_format_specific_options() || $format === NULL) {
     return $config->get('geshifilter_tags');
   }
-  return $filter->settings['geshifilter_tags'];
+  return $format->settings['geshifilter_tags'];
 }
 
 /**
  * @todo Please document this function.
  * @see http://drupal.org/node/1354
  */
-function geshifilter_decode_entities($filter = NULL) {
+function geshifilter_decode_entities($format = NULL) {
   $config = config('geshifilter.settings');
-  if (!geshifilter_use_format_specific_options() || $filter === NULL) {
+  if (!geshifilter_use_format_specific_options() || $format === NULL) {
     return $config->get('geshifilter_decode_entities');
   }
-  return $filter->settings['geshifilter_decode_entities'];
+  return $format->settings['geshifilter_decode_entities'];
 }
 
 /**
  * @todo Please document this function.
  * @see http://drupal.org/node/1354
  */
-function _geshifilter_tag_styles($filter = NULL) {
+function _geshifilter_tag_styles($format = NULL) {
   $config = config('geshifilter.settings');
-  if (!geshifilter_use_format_specific_options() || $filter === NULL) {
+  if (!geshifilter_use_format_specific_options() || $format === NULL) {
     return $config->get('geshifilter_tag_styles');
   }
-  return $filter->settings['geshifilter_tag_styles'];
+  return $format->settings['geshifilter_tag_styles'];
 }
 
 /**
