@@ -244,8 +244,8 @@ function _geshifilter_process($format, $text, $filter) {
   }
   // Get the available tags.
   list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format, $filter);
-  
-  if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, array_filter(_geshifilter_tag_styles($filter->format)))) {
+
+  if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, array_filter(_geshifilter_tag_styles($format)))) {
     $language_tags[] = 'questionmarkphp';
     $tag_to_lang['questionmarkphp'] = 'php';
   }

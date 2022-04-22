@@ -153,6 +153,7 @@ function geshifilter_decode_entities($format = NULL) {
  */
 function _geshifilter_tag_styles($format = NULL) {
   $config = config('geshifilter.settings');
+
   if (!geshifilter_use_format_specific_options() || $format === NULL) {
     return $config->get('geshifilter_tag_styles');
   }
@@ -168,13 +169,5 @@ function geshifilter_language_tags($language, $format = NULL) {
   if (!geshifilter_use_format_specific_options() || $format === NULL) {
     return $config->get("geshifilter_language_tags_{$language}");
   }
-
-  // @todo This is broken! The language tags are not being returned. It is because $filter is the string name and not the object being passed in.
-  // Perhaps the $filter does not have settings but rather $format does.
-  // $filter->settings is empty.
-//  dpm($format->settings, 'format settings 179');
-//  dpm($language, 'language');
-//  dpm($format->settings["geshifilter_language_tags_{$language}"], 'line 183',);
-
   return $format->settings["geshifilter_language_tags_{$language}"];
 }
