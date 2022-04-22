@@ -65,13 +65,16 @@ function _geshifilter_get_enabled_languages() {
  */
 function _geshifilter_get_tags($format) {
   static $geshifilter_tags_cache = array();
+
   if (!isset($geshifilter_tags_cache[$format])) {
     $generic_code_tags = _geshifilter_tag_split(geshifilter_tags($format));
     $language_tags = array();
     $tag_to_lang = array();
     $enabled_languages = _geshifilter_get_enabled_languages();
+    
     foreach ($enabled_languages as $language => $fullname) {
       $lang_tags = _geshifilter_tag_split(geshifilter_language_tags($language, $format));
+
       foreach ($lang_tags as $lang_tag) {
         $language_tags[] = $lang_tag;
         $tag_to_lang[$lang_tag] = $language;
@@ -159,10 +162,18 @@ function _geshifilter_tag_styles($filter = NULL) {
  * @todo Please document this function.
  * @see http://drupal.org/node/1354
  */
-function geshifilter_language_tags($language, $filter = NULL) {
+function geshifilter_language_tags($language, $format = NULL) {
   $config = config('geshifilter.settings');
-  if (!geshifilter_use_format_specific_options() || $filter === NULL) {
+  if (!geshifilter_use_format_specific_options() || $format === NULL) {
     return $config->get("geshifilter_language_tags_{$language}");
   }
-  return $filter->settings["geshifilter_language_tags_{$language}"];
+
+  // @todo This is broken! The language tags are not being returned. It is because $filter is the string name and not the object being passed in.
+  // Perhaps the $filter does not have settings but rather $format does.
+  // $filter->settings is empty.
+//  dpm($format->settings, 'format settings 179');
+//  dpm($language, 'language');
+//  dpm($format->settings["geshifilter_language_tags_{$language}"], 'line 183',);
+
+  return $format->settings["geshifilter_language_tags_{$language}"];
 }

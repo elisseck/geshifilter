@@ -165,7 +165,7 @@ function geshifilter_filter_info() {
  */
 function geshifilter_prepare_callback($text, $format, $filter) {
   require_once __DIR__ . '/geshifilter.pages.inc';
-  return _geshifilter_prepare($format, $text);
+  return _geshifilter_prepare($format, $text, $filter);
 }
 
 /**
@@ -173,7 +173,7 @@ function geshifilter_prepare_callback($text, $format, $filter) {
  */
 function geshifilter_process_callback($text, $format, $filter) {
   require_once __DIR__ . '/geshifilter.pages.inc';
-  return _geshifilter_process($format, $text);
+  return _geshifilter_process($format, $text, $filter);
 }
 
 /**
