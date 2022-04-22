@@ -66,7 +66,7 @@ function _geshifilter_get_enabled_languages() {
 function _geshifilter_get_tags($format, $filter) {
   static $geshifilter_tags_cache = array();
 
-  if (!isset($geshifilter_tags_cache[$format])) {
+  if (!isset($geshifilter_tags_cache[$filter->format])) {
     $generic_code_tags = _geshifilter_tag_split(geshifilter_tags($format));
     $language_tags = array();
     $tag_to_lang = array();
