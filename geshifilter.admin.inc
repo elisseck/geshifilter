@@ -17,7 +17,7 @@ function _geshifilter_filter_settings($form, &$form_state, $filter, $format) {
 
   if (geshifilter_use_format_specific_options()) {
     // Tags and attributes.
-    $settings['general_tags'] = _geshifilter_general_highlight_tags_settings($filter);
+    $settings['general_tags'] = _geshifilter_general_highlight_tags_settings($format, $filter);
     $settings['#validate'][] = '_geshifilter_tag_styles_validate';
     // Per language tags.
     $settings['per_language_settings'] = array(
@@ -116,7 +116,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
     // Generic tags settings.
     // @todo: do this conditional form part showing/hiding in jQuery instead of in the form builder.
     if (!geshifilter_use_format_specific_options()) {
-      $form['geshifilter_tag_options']['geshifilter_general_tags'] = _geshifilter_general_highlight_tags_settings();
+      $form['geshifilter_tag_options']['geshifilter_general_tags'] = _geshifilter_general_highlight_tags_settings($format);
       $form['#validate'][] = '_geshifilter_tag_styles_validate';
     }
 
@@ -426,9 +426,9 @@ function geshifilter_admin_per_language_settings_submit($form, &$form_state) {
 /**
  * Helper function for some settings form fields usable as general and specific settings.
  *
- * @param stdClass $format format object (e.g. with field $format->format).
+ * @param stdClass $filter format object (e.g. with field $filter->format).
  */
-function _geshifilter_general_highlight_tags_settings($filter = NULL) {
+function _geshifilter_general_highlight_tags_settings($format, $filter = NULL) {
   $form = array();
 
   // generic tags
