@@ -256,6 +256,7 @@ function _geshifilter_process($format, $text, $filter) {
   // Escape special (regular expression) characters in tags (for tags like 'c++' and 'c#').
   $tags = preg_replace('#(\\+|\\#)#', '\\\\$1', $tags);
   $tags_string = implode('|', $tags);
+  
   // Pattern for matching the prepared "<code>...</code>" stuff.
   $pattern = '#\\[geshifilter-('. $tags_string .')([^\\]]*)\\](.*?)(\\[/geshifilter-\1\\])#s';
   

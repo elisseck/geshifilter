@@ -153,7 +153,6 @@ function geshifilter_decode_entities($format = NULL) {
  */
 function _geshifilter_tag_styles($format = NULL) {
   $config = config('geshifilter.settings');
-
   if (!geshifilter_use_format_specific_options() || $format === NULL) {
     return $config->get('geshifilter_tag_styles');
   }
