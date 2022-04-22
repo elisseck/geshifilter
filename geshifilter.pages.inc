@@ -27,7 +27,7 @@ function _geshifilter_parse_attributes($attributes, $format) {
   $title = NULL;
 
   // Get the possible tags and languages.
-  list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format);
+  list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format, $filter);
 
   $language_attributes = _geshifilter_whitespace_explode(GESHIFILTER_ATTRIBUTES_LANGUAGE);
   $attributes_preg_string = implode('|', array_merge(
@@ -112,7 +112,7 @@ function _geshifilter_parse_attributes($attributes, $format) {
 function _geshifilter_prepare($format, $text, $filter) {
 
   // get the available tags
-  list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($filter->format);
+  list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format, $filter);
   $tags = array_merge($generic_code_tags, $language_tags);
   // escape special (regular expression) characters in tags (for tags like 'c++' and 'c#')
   $tags = preg_replace('#(\\+|\\#)#', '\\\\$1', $tags);
@@ -195,7 +195,7 @@ function _geshifilter_prepare_callback($match, $format) {
     $enabled_languages = _geshifilter_get_enabled_languages();
 
     // Usage of language tag?
-    list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format);
+    list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format, $filter);
     if (isset($tag_to_lang[$tag_name]) && isset($enabled_languages[$tag_to_lang[$tag_name]])) {
       $lang = $tag_to_lang[$tag_name];
     }
@@ -237,19 +237,20 @@ function _geshifilter_prepare_php_callback($match, $format) {
 function _geshifilter_process($format, $text, $filter) {
   // Load GeSHi library (if not already).
   $geshi_library = libraries_load('geshi');
+
   if (!$geshi_library['loaded']) {
     backdrop_set_message($geshi_library['error message'], 'error');
     return $text;
   }
   // Get the available tags.
-  list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format);
+  list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format, $filter);
   
   if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, array_filter(_geshifilter_tag_styles($filter->format)))) {
     $language_tags[] = 'questionmarkphp';
     $tag_to_lang['questionmarkphp'] = 'php';
   }
   
-  $tags = !empty($generic_code_tags) ? array_merge($generic_code_tags, $language_tags) : NULL;
+  $tags = !empty($generic_code_tags) ? array_merge($generic_code_tags, $language_tags) : '';
   $filter_format = $filter->format;
 
   // Escape special (regular expression) characters in tags (for tags like 'c++' and 'c#').
@@ -289,7 +290,7 @@ function _geshifilter_replace_callback($match, $format) {
   $title = NULL;
 
   // Determine language based on tag name if possible.
-  list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format);
+  list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format, $filter);
 
   if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, array_filter(_geshifilter_tag_styles($format)))) {
     $language_tags[] = 'questionmarkphp';

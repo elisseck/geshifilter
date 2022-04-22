@@ -45,7 +45,7 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
 
   if ($long) {
     // get the available tags
-    list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($filter->format);
+    list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format, $filter);
     // get the available languages
     $languages = _geshifilter_get_enabled_languages();
     $lang_attributes = _geshifilter_whitespace_explode(GESHIFILTER_ATTRIBUTES_LANGUAGE);
@@ -186,7 +186,7 @@ function _geshifilter_filter_tips($filter, $format, $long = FALSE) {
   }
   else {
     // get the available tags
-    list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($filter->format);
+    list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format, $filter);
     $tags = array();
     foreach ($generic_code_tags as $tag) {
       $tags[] = '<code>' . $bracket_open . $tag . $bracket_close . '</code>';

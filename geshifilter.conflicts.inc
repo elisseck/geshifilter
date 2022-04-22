@@ -97,7 +97,7 @@ function _geshifilter_htmlfilter_conflicts($format, $cfilter, $geshifilter) {
 function _geshifilter_codefilter_conflicts($format, $cfilter, $geshifilter) {
   $conflicts = array();
   if (in_array(GESHIFILTER_BRACKETS_ANGLE, array_filter(_geshifilter_tag_styles($format)))) {
-    list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format);
+    list($generic_code_tags, $language_tags, $tag_to_lang) = _geshifilter_get_tags($format, $filter);
     if (in_array('code', $generic_code_tags) || in_array('code', $language_tags)) {
       $conflicts[] = array(
         'description' => t('%cfilter and %geshifilter trigger on the same tag "&lt;code&gt;".',
