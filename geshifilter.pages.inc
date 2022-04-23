@@ -19,7 +19,7 @@ require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.inc';
  * @param $format the concerning text format.
  * @return array of settings with fields 'language', 'line_numbering', 'linenumbers_start' and 'title'.
  */
-function _geshifilter_parse_attributes($attributes, $format) {
+function _geshifilter_parse_attributes($attributes, $format, $filter) {
   // Initial values.
   $lang = NULL;
   $line_numbering = NULL;
@@ -126,34 +126,33 @@ function _geshifilter_prepare($format, $text, $filter) {
   // and prepare the container content (newline and angle bracket protection).
   // @todo: make sure that these replacements can be done in series.
   $tag_styles = array_filter(_geshifilter_tag_styles($format));
-  $filter_format = $filter->format;
-
+  
   if (in_array(GESHIFILTER_BRACKETS_ANGLE, $tag_styles)) {
     // Prepare <foo>..</foo> blocks.
     $pattern = '#(<)('. $tags_string .')((\s+[^>]*)*)(>)(.*?)(</\2\s*>|$)#s';
-    $text = preg_replace_callback($pattern, function($match) use ($filter_format) {
-      return _geshifilter_prepare_callback($match, $filter_format);
+    $text = preg_replace_callback($pattern, function($match) use ($format, $filter) {
+      return _geshifilter_prepare_callback($match, $format, $filter);
     }, $text);
   }
   if (in_array(GESHIFILTER_BRACKETS_SQUARE, $tag_styles)) {
     // Prepare [foo]..[/foo] blocks.
     $pattern = '#((?<!\[)\[)('. $tags_string .')((\s+[^\]]*)*)(\])(.*?)((?<!\[)\[/\2\s*\]|$)#s';
-    $text = preg_replace_callback($pattern, function($match) use ($filter_format) {
-      return _geshifilter_prepare_callback($match, $filter_format);
+    $text = preg_replace_callback($pattern, function($match) use ($format, $filter) {
+      return _geshifilter_prepare_callback($match, $format, $filter);
     }, $text);
   }
   if (in_array(GESHIFILTER_BRACKETS_DOUBLESQUARE, $tag_styles)) {
     // Prepare [[foo]]..[[/foo]] blocks.
     $pattern = '#(\[\[)('. $tags_string .')((\s+[^\]]*)*)(\]\])(.*?)(\[\[/\2\s*\]\]|$)#s';
-    $text = preg_replace_callback($pattern, function($match) use ($filter_format) {
-      return _geshifilter_prepare_callback($match, $filter_format);
+    $text = preg_replace_callback($pattern, function($match) use ($format, $filter) {
+      return _geshifilter_prepare_callback($match, $format, $filter);
     }, $text);
   }
   if (in_array(GESHIFILTER_BRACKETS_PHPBLOCK, $tag_styles)) {
     // Prepare < ?php ... ? > blocks.
     $pattern = '#[\[<](\?php|\?PHP|%)(.+?)((\?|%)[\]>]|$)#s';
-    $text = preg_replace_callback($pattern, function($match) use ($filter_format) {
-      return _geshifilter_prepare_php_callback($match, $filter_format);
+    $text = preg_replace_callback($pattern, function($match) use ($format) {
+      return _geshifilter_prepare_php_callback($match, $format);
     }, $text);
   }
   return $text;
@@ -168,7 +167,7 @@ function _geshifilter_prepare($format, $text, $filter) {
  * Escapes the tricky characters like angle brackets with check_plain() to
  * prevent messing up by other filters like the HTML filter.
  */
-function _geshifilter_prepare_callback($match, $format) {
+function _geshifilter_prepare_callback($match, $format, $filter) {
   // $match[0]: complete matched string
   // $match[1]: opening bracket ('<' or '[')
   // $match[2]: tag
@@ -202,7 +201,7 @@ function _geshifilter_prepare_callback($match, $format) {
     // Usage of language attribute?
     else {
       // Get additional settings from the tag attributes.
-      $settings = _geshifilter_parse_attributes($tag_attributes, $format);
+      $settings = _geshifilter_parse_attributes($tag_attributes, $format, $filter);
       if ($settings['language'] && isset($enabled_languages[$settings['language']])) {
         $lang = $settings['language'];
       }
@@ -302,7 +301,7 @@ function _geshifilter_replace_callback($match, $format, $filter) {
   }
 
   // Get additional settings from the tag attributes.
-  $settings = _geshifilter_parse_attributes($tag_attributes, $filter->format);
+  $settings = _geshifilter_parse_attributes($tag_attributes, $format, $filter);
   if (isset($settings['language'])) {
     $lang = $settings['language'];
   }
