@@ -260,8 +260,8 @@ function _geshifilter_process($format, $text, $filter) {
   // Pattern for matching the prepared "<code>...</code>" stuff.
   $pattern = '#\\[geshifilter-('. $tags_string .')([^\\]]*)\\](.*?)(\\[/geshifilter-\1\\])#s';
   
-  $text = preg_replace_callback($pattern, function($match) use ($filter_format) {
-    return _geshifilter_replace_callback($match, $filter_format);
+  $text = preg_replace_callback($pattern, function($match) use ($format, $filter) {
+    return _geshifilter_replace_callback($match, $format, $filter);
   }, $text);
 
   return $text;
@@ -270,7 +270,7 @@ function _geshifilter_process($format, $text, $filter) {
 /**
  * preg_replace_callback callback.
  */
-function _geshifilter_replace_callback($match, $format) {
+function _geshifilter_replace_callback($match, $format, $filter) {
   $config = config('geshifilter.settings');
   // $match[0]: complete matched string
   // $match[1]: tag name
@@ -302,7 +302,7 @@ function _geshifilter_replace_callback($match, $format) {
   }
 
   // Get additional settings from the tag attributes.
-  $settings = _geshifilter_parse_attributes($tag_attributes, $format);
+  $settings = _geshifilter_parse_attributes($tag_attributes, $filter->format);
   if (isset($settings['language'])) {
     $lang = $settings['language'];
   }
