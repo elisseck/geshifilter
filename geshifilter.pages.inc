@@ -250,7 +250,7 @@ function _geshifilter_process($format, $text, $filter) {
     $tag_to_lang['questionmarkphp'] = 'php';
   }
   
-  $tags = !empty($generic_code_tags) ? array_merge($generic_code_tags, $language_tags) : '';
+  $tags = array_merge($generic_code_tags, $language_tags);
   $filter_format = $filter->format;
 
   // Escape special (regular expression) characters in tags (for tags like 'c++' and 'c#').
@@ -263,7 +263,7 @@ function _geshifilter_process($format, $text, $filter) {
   $text = preg_replace_callback($pattern, function($match) use ($filter_format) {
     return _geshifilter_replace_callback($match, $filter_format);
   }, $text);
-  
+
   return $text;
 }
 
