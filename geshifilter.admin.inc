@@ -116,7 +116,7 @@ function geshifilter_admin_general_settings($form, &$form_state) {
     // Generic tags settings.
     // @todo: do this conditional form part showing/hiding in jQuery instead of in the form builder.
     if (!geshifilter_use_format_specific_options()) {
-      $form['geshifilter_tag_options']['geshifilter_general_tags'] = _geshifilter_general_highlight_tags_settings($format);
+      $form['geshifilter_tag_options']['geshifilter_general_tags'] = _geshifilter_general_highlight_tags_settings($format, $filter);
       $form['#validate'][] = '_geshifilter_tag_styles_validate';
     }
 
