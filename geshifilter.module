@@ -201,12 +201,16 @@ function geshifilter_requirements($phase) {
   $requirements = array();
   if ($phase == 'runtime') {
     require_once __DIR__ . '/geshifilter.inc';
-    // check if GeSHi library is available
+    // Check if GeSHi library is available.
     $geshi_library = libraries_load('geshi');
     if (!$geshi_library['loaded']) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
         'value' => t('GeSHi library not found.'),
+        'description' => t('Please <a href="!download">download</a> and place the GeSHi PHP library in the <code>/libraries</code> directory. See the <a href="!installation">installation instructions for more information</a>.', array(
+          '!download' => 'https://sourceforge.net/projects/geshi/files/geshi/',
+          '!installation' => 'https://github.com/backdrop-contrib/geshifilter#installation',
+        )),
         'severity' => REQUIREMENT_ERROR,
       );
     }
