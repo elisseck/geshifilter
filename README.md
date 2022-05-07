@@ -23,9 +23,9 @@ See installation procedure below for more information.
 This module requires that the following modules are also enabled:
 
   * [Libraries API](https://backdropcms.org/project/libraries)
-  
 
-Installation <!-- This section is required. -->
+
+Installation
 ------------
 
 GeSHi Filter
@@ -39,12 +39,12 @@ GeSHi Filter
   required information.
 
 - Download the GeSHi library from
-  http://sourceforge.net/projects/geshi/files/geshi
+  https://sourceforge.net/projects/geshi/files/geshi/
   Make sure you download a version of the branch 1.0.x and not a version
   from the branch 1.1.x (also described as geshi-dev), which is not yet
   supported by the GeSHi filter module.
   Place the entire extracted 'geshi' folder (which contains geshi.php)
-  in a libraries directory (e.g. as sites/all/libraries/geshi).
+  in a libraries directory (typically /libraries/geshi).
 
 GeSHi Fields
 
