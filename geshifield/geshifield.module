@@ -88,7 +88,7 @@ function geshifield_element_info() {
   $elements = array(
     'geshifield_textarea' => array(
       '#input' => TRUE,
-      '#process' => array('geshifield_textarea_process' ),
+      '#process' => array('geshifield_textarea_process'),
     ),
   );
   return $elements;
@@ -98,11 +98,9 @@ function geshifield_element_info() {
  * Process callback for geshifield_textarea widget.
  */
 function geshifield_textarea_process($element, $form_state, $complete_form) {
-  module_load_include('inc', 'geshifilter');
-
-
-  $defaults = $element['#value'];
-  #$field = content_fields($element['#field_name'], $element['#type_name']);
+  form_load_include($form_state, 'inc', 'geshifilter', 'geshifilter');
+  
+  $defaults = $element['#value'];  
   $field = field_widget_instance($element, $form_state);
 
   $enabled_languages = _geshifilter_get_enabled_languages();
@@ -154,6 +152,7 @@ function geshifield_field_formatter_info() {
  */
 function geshifield_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $elements = array();
+  
   foreach ($items as $delta => $item) {
     $elements[$delta] = array(
       '#markup' => theme('geshifield_formatter_' . $display['type'], array('element' => $item, 'field' => $instance)),
@@ -169,6 +168,7 @@ function geshifield_field_formatter_view($entity_type, $entity, $field, $instanc
 function theme_geshifield_formatter_default($variables) {
   $output = '';
   module_load_include('inc', 'geshifilter', 'geshifilter.pages');
+
   if (isset($variables['element']['sourcecode'])) {
     $output .= geshifilter_geshi_process($variables['element']['sourcecode'], $variables['element']['language']);
   }
@@ -182,6 +182,7 @@ function theme_geshifield_formatter_default($variables) {
 function theme_geshifield_formatter_nohighlighting($variables) {
   $output = '';
   module_load_include('inc', 'geshifilter', 'geshifilter.pages');
+
   if (isset($variables['element']['sourcecode'])) {
     $output .= geshifilter_geshi_process($variables['element']['sourcecode'], 'text');
   }
@@ -195,6 +196,7 @@ function theme_geshifield_formatter_nohighlighting($variables) {
 function theme_geshifield_formatter_trimmed($variables) {
   $output = '';
   module_load_include('inc', 'geshifilter', 'geshifilter.pages');
+
   if (isset($variables['element']['sourcecode'])) {
     $output .= geshifilter_geshi_process(truncate_utf8($variables['element']['sourcecode'], 200), $variables['element']['language']);
   }
