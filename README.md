@@ -89,18 +89,19 @@ Current Maintainers <!-- This section is required. -->
 Credits <!-- This section is required. -->
 -------
 
-- Ported to Backdrop CMS by [Justin Christoffersen](https://github.com/larsdesigns).
+- Ported to Backdrop CMS by [Justin Christoffersen](https://github.com/larsdesigns)
+- Ported to Backdrop CMS by [Nate Lampton](https://github.com/quicksketch)
 - Port to Backdrop CMS sponsored by [Exceljet](https://exceljet.net)
 
 - Originally written for Drupal by Vincent Filby.
 - Port to Drupal 4.7:
-  - Vincent Filby.
-  - Michael Hutchinson (http://compsoc.dur.ac.uk/~mjh/contact).
-  - Damien Pitard.
+  - Vincent Filby
+  - Michael Hutchinson
+  - Damien Pitard
 
 - Port to Drupal 5:
-  - rötzi (http://drupal.org/user/73064).
-  - Stefaan Lippens (http://drupal.org/user/41478).
+  - rötzi (http://drupal.org/user/73064)
+  - Stefaan Lippens (http://drupal.org/user/41478)
 
 License <!-- This section is required. -->
 -------
