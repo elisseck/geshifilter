@@ -90,7 +90,7 @@ Credits <!-- This section is required. -->
 -------
 
 - Ported to Backdrop CMS by [Justin Christoffersen](https://github.com/larsdesigns).
-- Port to Backdrop CMS sponsored by [Exceljet.net](https://exceljet.net)
+- Port to Backdrop CMS sponsored by [Exceljet](https://exceljet.net)
 
 - Originally written for Drupal by Vincent Filby <vfilby at gmail dot com>.
 - Port to Drupal 4.7:
