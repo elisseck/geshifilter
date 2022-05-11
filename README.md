@@ -92,11 +92,11 @@ Credits <!-- This section is required. -->
 - Ported to Backdrop CMS by [Justin Christoffersen](https://github.com/larsdesigns).
 - Port to Backdrop CMS sponsored by [Exceljet](https://exceljet.net)
 
-- Originally written for Drupal by Vincent Filby <vfilby at gmail dot com>.
+- Originally written for Drupal by Vincent Filby.
 - Port to Drupal 4.7:
-  - Vincent Filby <vfilby at gmail dot com>.
+  - Vincent Filby.
   - Michael Hutchinson (http://compsoc.dur.ac.uk/~mjh/contact).
-  - Damien Pitard <dpdev00 at gmail dot com>.
+  - Damien Pitard.
 
 - Port to Drupal 5:
   - rötzi (http://drupal.org/user/73064).
