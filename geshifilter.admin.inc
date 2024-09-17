@@ -60,9 +60,6 @@ function geshifilter_admin_general_settings($form, &$form_state) {
   $form = array();
   $form['#config'] = 'geshifilter.settings';
 
-  // Try to load GeSHi library and get version if successful.
-  $geshi_library = libraries_load('geshi');
-
   $form['geshifilter_help'] = array(
     '#type' => 'help',
     '#markup' => '<p>' . t('The GeSHi filter module provides a filter for syntax highlighting of inline source code or blocks of source code based on the PHP library !GeSHi.', array('!GeSHi' => l('GeSHi (Generic Syntax Highlighter)', 'http://qbnz.com/highlighter/'))) . '</p>'
@@ -80,11 +77,11 @@ function geshifilter_admin_general_settings($form, &$form_state) {
     '#description' => t('The GeSHi filter requires the GeSHi library (which needs to be <a href="!geshi">downloaded</a> and installed seperately).',
       array('!geshi' => url('http://qbnz.com/highlighter/'))),
     '#collapsible' => TRUE,
-    '#collapsed' => $geshi_library['loaded'],
+    '#collapsed' => class_exists('GeSHi'),
   );
 
   // If the GeSHi library is loaded, show all the options and settings.
-  if ($geshi_library['loaded']) {
+  if (class_exists('GeSHi')) {
 
     // Option for flushing the GeSHi language definition cache.
     $form['geshifilter_library_info']['geshi_language_definition_caching'] = array(
@@ -263,10 +260,8 @@ function geshifilter_admin_general_settings_submit($form, &$form_state) {
  * Menu callback for per language settings.
  */
 function geshifilter_admin_per_language_settings($form, &$form_state, $view = 'enabled') {
-  // check if GeSHi library is available
-  $geshi_library = libraries_load('geshi');
-  if (!$geshi_library['loaded']) {
-    backdrop_set_message($geshi_library['error message'], 'error');
+  if (!class_exists('GeSHi')) {
+    backdrop_set_message('Could not load GeSHi library.', 'error');
     return;
   }
   $add_checkbox = TRUE;
@@ -605,8 +600,7 @@ function _geshifilter_clear_filter_cache() {
  */
 function _geshifilter_generate_languages_css_rules() {
   $output = '';
-  $geshi_library = libraries_load('geshi');
-  if ($geshi_library['loaded']) {
+  if (class_exists('GeSHi')) {
     require_once backdrop_get_path('module', 'geshifilter') . '/geshifilter.pages.inc';
     $languages = _geshifilter_get_enabled_languages();
     foreach ($languages as $langcode => $language_full_name) {

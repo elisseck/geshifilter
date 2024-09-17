@@ -15,11 +15,9 @@ function geshifilter_admin_filter_conflicts($check_only = FALSE) {
 
   // start
   $output = '';
-  // check if GeSHi library is available
-  $geshi_library = libraries_load('geshi');
-  if (!$geshi_library['loaded']) {
+  if (!class_exists('GeSHi')) {
     if (!$check_only) {
-      backdrop_set_message($geshi_library['error message'], 'error');
+      backdrop_set_message('Could not load GeSHi library.', 'error');
     }
     return $output;
   }

@@ -84,3 +84,19 @@ function geshifilter_update_1000() {
   update_variable_del('geshifilter_language_tags_language');
   update_variable_del('geshifilter_language_tags_language_format');
 }
+
+/**
+ * Move the geshifilter library, if it existed before.
+ */
+function geshifilter_update_1001() {
+  //path recommended by previous documentation
+  $old_path = BACKDROP_ROOT . '/libraries/geshi';
+  $new_path = BACKDROP_ROOT . '/' . backdrop_get_path('module', 'geshifilter') . '/libraries/geshi';
+  $file_moved = false;
+  if (file_exists($old_path)) {
+    $files_moved = rename($old_path, $new_path);
+  }
+  if (!$files_moved) {
+    return t('Unable to locate or move GeSHi library. Place the library in the geshifilter/libraries directory.');
+  }
+}

@@ -15,10 +15,9 @@ function _geshifilter_get_available_languages() {
   $available_languages = config_get('geshifilter.settings', 'geshifilter_available_languages_cache');
   if ($available_languages === NULL) {
     // not in cache: build the array of available_languages
-    $geshi_library = libraries_load('geshi');
     $available_languages = array();
-    if ($geshi_library['loaded']) {
-      $dirs = array($geshi_library['library path'] . '/geshi', backdrop_get_path('module', 'geshifilter') . '/geshi-extra');
+    if (class_exists('GeSHi')) {
+      $dirs = array(backdrop_get_path('module', 'geshifilter') . '/libraries/geshi/geshi', backdrop_get_path('module', 'geshifilter') . '/geshi-extra');
       foreach ($dirs as $dir) {
         foreach (file_scan_directory($dir, '/.[pP][hH][pP]$/i') as $filename => $fileinfo) {
           // short name

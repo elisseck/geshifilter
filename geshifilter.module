@@ -201,9 +201,7 @@ function geshifilter_requirements($phase) {
   $requirements = array();
   if ($phase == 'runtime') {
     require_once __DIR__ . '/geshifilter.inc';
-    // Check if GeSHi library is available.
-    $geshi_library = libraries_load('geshi');
-    if (!$geshi_library['loaded']) {
+    if (!class_exists('GeSHi')) {
       $requirements[] = array(
         'title' => 'GeSHi filter',
         'value' => t('GeSHi library not found.'),
@@ -254,29 +252,6 @@ function geshifilter_requirements($phase) {
     }
   }
   return $requirements;
-}
-
-/**
- * Implements hook_libraries_info().
- */
-function geshifilter_libraries_info() {
-  return array(
-    'geshi' => array(
-      'title' => 'GeSHi - Generic Syntax Highlighter for PHP',
-      'vendor url' => 'http://sourceforge.net/projects/geshi',
-      'download url' => 'http://sourceforge.net/projects/geshi/files/geshi',
-      'version arguments' => array(
-        'file' => 'geshi.php',
-        'pattern' => "/define\('GESHI_VERSION', '(.*)'\);/",
-        'lines' => 50,
-      ),
-      'files' => array(
-        'php' => array(
-          'geshi.php',
-        ),
-      ),
-    ),
-  );
 }
 
 /**
@@ -340,6 +315,8 @@ function geshifilter_form_filter_admin_format_form_alter(&$form, &$form_state, $
  * Implements hook_autoload_info().
  */
 function geshifilter_autoload_info() {
-  return array(
-  );
+  return [
+    'GeSHi' => 'libraries/geshi/geshi.php'
+  ];
 }
+

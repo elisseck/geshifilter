@@ -234,11 +234,8 @@ function _geshifilter_prepare_php_callback($match, $format) {
  * Geshifilter_filter callback for processing input text.
  */
 function _geshifilter_process($format, $text, $filter) {
-  // Load GeSHi library (if not already).
-  $geshi_library = libraries_load('geshi');
-
-  if (!$geshi_library['loaded']) {
-    backdrop_set_message($geshi_library['error message'], 'error');
+  if (!class_exists('GeSHi')) {
+    backdrop_set_message('Could not load GeSHi library.', 'error');
     return $text;
   }
   // Get the available tags.
@@ -360,10 +357,8 @@ function geshifilter_process_sourcecode($source_code, $lang, $line_numbering = 0
  */
 function geshifilter_geshi_process($source_code, $lang, $line_numbering = 0, $linenumbers_start = 1, $inline_mode = FALSE, $title = NULL) {
   $config = config('geshifilter.settings');
-  // load GeSHi library (if not already)
-  $geshi_library = libraries_load('geshi');
-  if (!$geshi_library['loaded']) {
-    backdrop_set_message($geshi_library['error message'], 'error');
+  if (!class_exists('GeSHi')) {
+    backdrop_set_message('Could not load GeSHi library.', 'error');
     return $source_code;
   }
 

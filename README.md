@@ -20,11 +20,6 @@ Highlighter, written by Nigel McNie) which can be found at
   http://qbnz.com/highlighter
 See installation procedure below for more information.
 
-This module requires that the following modules are also enabled:
-
-  * [Libraries API](https://backdropcms.org/project/libraries)
-
-
 Installation
 ------------
 
@@ -44,7 +39,7 @@ GeSHi Filter
   from the branch 1.1.x (also described as geshi-dev), which is not yet
   supported by the GeSHi filter module.
   Place the entire extracted 'geshi' folder (which contains geshi.php)
-  in a libraries directory (typically /libraries/geshi).
+  in the libraries directory of this module (./libraries/geshi).
 
 GeSHi Fields
 
